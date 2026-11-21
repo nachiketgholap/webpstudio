@@ -1,0 +1,2208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#ffffff">
+<title>WebP Studio — Convert images to WebP, free and private</title>
+<meta name="description" content="Convert PNG, JPG, GIF, AVIF, SVG and more to WebP in your browser. Bulk convert, set a target file size, compare before and after, and download everything as a ZIP. No uploads, no sign-up.">
+<meta name="author" content="Nachiket Gholap">
+<meta property="og:type" content="website">
+<meta property="og:title" content="WebP Studio — Convert images to WebP">
+<meta property="og:description" content="Free, private image to WebP converter by Nachiket Gholap. Bulk convert and download as ZIP. Your images never leave your device.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='2' y='2' width='20' height='20' rx='6' fill='%231a73e8'/%3E%3Cpath d='M7 15.5l3.2-4.3 2.2 2.8 1.9-2.4 2.7 3.9H7z' fill='%23fff'/%3E%3Ccircle cx='9' cy='8.5' r='1.5' fill='%23fff'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "WebP Studio",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Any (runs in a web browser)",
+  "browserRequirements": "Requires JavaScript",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Convert PNG, JPG, GIF, AVIF, SVG and more to WebP in your browser. Bulk conversion, target file size, before/after comparison and ZIP download. Images are never uploaded.",
+  "author": {
+    "@type": "Person",
+    "name": "Nachiket Gholap",
+    "sameAs": ["https://www.linkedin.com/in/nachiketgholap/"]
+  }
+}
+</script>
+
+<style>
+/* ================= Design tokens (white, Google-style) ================= */
+:root{
+  --blue:#1a73e8; --blue-d:#1765cc; --blue-ink:#174ea6; --blue-l:#e8f0fe; --blue-xl:#f4f8fe;
+  --ring:rgba(26,115,232,.22);
+  --ink:#202124; --ink2:#5f6368; --ink3:#80868b;
+  --line:#dadce0; --line2:#e8eaed;
+  --bg:#ffffff; --bg2:#f8f9fa; --bg3:#f1f3f4; --foot:#f2f2f2; --chk:#eceff1;
+  --ok:#137333; --ok-bg:#e6f4ea;
+  --warn:#9a5700; --warn-bg:#fef7e0; --warn-line:#fde293;
+  --err:#c5221f; --err-bg:#fce8e6;
+  --shadow:0 1px 2px rgba(60,64,67,.10),0 1px 3px 1px rgba(60,64,67,.06);
+  --shadow-lg:0 4px 8px 3px rgba(60,64,67,.15),0 1px 3px rgba(60,64,67,.3);
+  --r:14px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:84px;background:var(--bg)}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+[hidden]{display:none!important}
+strong,b{font-weight:600}
+h1,h2,h3{line-height:1.25;letter-spacing:-.015em;margin:0 0 12px}
+h1{font-size:clamp(27px,4.6vw,40px);font-weight:600}
+h2{font-size:20px;font-weight:600}
+h3{font-size:16px;font-weight:600}
+p{margin:0 0 14px}
+a{color:var(--blue)}
+img{max-width:100%}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:8px}
+.ico{display:block;flex:0 0 auto}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+[tabindex="-1"]:focus{outline:none}
+.kbd{font-family:inherit;font-size:12px;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:0 5px;background:var(--bg)}
+
+.skip{position:absolute;left:-9999px;top:10px;z-index:200;padding:10px 16px;border-radius:10px;
+  background:var(--blue);color:#fff;font-weight:500;text-decoration:none}
+.skip:focus{left:10px}
+
+/* ================= Header ================= */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  background:var(--bg);
+  background:color-mix(in srgb,#fff 92%,transparent);
+  -webkit-backdrop-filter:saturate(1.6) blur(12px);backdrop-filter:saturate(1.6) blur(12px);
+  border-bottom:1px solid var(--line2);
+}
+.bar{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:0 18px;height:62px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:16.5px;color:var(--ink);text-decoration:none;flex:0 0 auto}
+.nav{display:flex;align-items:center;gap:2px;margin-left:auto}
+.nav a,.navbtn{
+  padding:8px 14px;border-radius:999px;font:inherit;font-size:14px;font-weight:500;color:var(--ink2);
+  text-decoration:none;white-space:nowrap;background:transparent;border:0;cursor:pointer;
+  display:inline-flex;align-items:center;gap:6px;transition:background .15s,color .15s;
+}
+.nav a:hover,.navbtn:hover{background:var(--bg3);color:var(--ink)}
+.nav a.on,.navbtn.on{background:var(--blue-l);color:var(--blue-ink);font-weight:600}
+.navbtn .caret{transition:transform .18s}
+.navbtn[aria-expanded="true"] .caret{transform:rotate(180deg)}
+.dd{position:relative}
+.ddpanel{
+  position:absolute;left:0;top:calc(100% + 8px);min-width:210px;padding:6px;
+  background:var(--bg);border:1px solid var(--line2);border-radius:14px;box-shadow:var(--shadow-lg);
+}
+.ddpanel a{display:block;padding:10px 14px;border-radius:9px;color:var(--ink);font-size:14px;font-weight:500;text-decoration:none}
+.ddpanel a:hover{background:var(--bg3)}
+.ddpanel a.on{background:var(--blue-l);color:var(--blue-ink)}
+
+.menubtn{display:none;margin-left:auto;width:42px;height:42px;border-radius:12px;border:0;background:transparent;
+  color:var(--ink);cursor:pointer;align-items:center;justify-content:center}
+.menubtn:hover{background:var(--bg3)}
+.mnav{
+  position:absolute;left:0;right:0;top:100%;
+  background:var(--bg);border-bottom:1px solid var(--line2);box-shadow:0 8px 16px rgba(60,64,67,.12);
+  padding:8px 14px 14px;max-height:calc(100vh - 62px);max-height:calc(100dvh - 62px);overflow:auto;
+}
+.mnav a{display:block;padding:12px 14px;border-radius:10px;color:var(--ink);text-decoration:none;font-weight:500}
+.mnav a:hover{background:var(--bg3)}
+.mnav a.on{background:var(--blue-l);color:var(--blue-ink)}
+.mnav .sub a{padding-left:30px;font-size:14.5px}
+.mnav .grp-lbl{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);font-weight:600;padding:12px 14px 4px;margin:0}
+
+/* ================= Layout ================= */
+main{max-width:1080px;margin:0 auto;padding:34px 18px 80px;outline:none}
+.page{animation:fade .2s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.doc{max-width:780px}
+.doc h1{margin-bottom:6px}
+.doc .lead{color:var(--ink2);margin-bottom:26px;font-size:15.5px}
+.doc h2{margin-top:34px}
+.doc ul,.doc ol{padding-left:22px;margin:0 0 16px}
+.doc li{margin-bottom:8px}
+.section{margin-top:64px}
+.section > h2{text-align:center;margin-bottom:8px}
+.section > .sublead{text-align:center;color:var(--ink2);max-width:640px;margin:0 auto 24px}
+
+/* ================= Hero ================= */
+.hero{text-align:center;max-width:720px;margin:0 auto 26px}
+.eyebrow{display:inline-block;font-size:12.5px;font-weight:600;color:var(--blue-ink);background:var(--blue-l);
+  padding:5px 12px;border-radius:999px;margin-bottom:14px}
+.hero p{color:var(--ink2);font-size:16px;margin:0}
+.chips-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-top:16px;font-size:13px;color:var(--ink2)}
+.chips-row span{display:inline-flex;align-items:center;gap:6px}
+.chips-row svg{color:var(--ok)}
+
+/* ================= Tool ================= */
+.tool{border:1px solid var(--line);border-radius:20px;background:var(--bg);box-shadow:var(--shadow);overflow:hidden}
+.drop{
+  position:relative;display:block;width:100%;margin:0;border:0;
+  background:var(--bg);padding:44px 20px 40px;text-align:center;cursor:pointer;
+  font:inherit;color:inherit;transition:background .15s;
+  border-bottom:1px solid var(--line2);
+}
+.drop::after{content:"";position:absolute;top:12px;right:12px;bottom:12px;left:12px;border:2px dashed var(--line);border-radius:14px;pointer-events:none;transition:border-color .15s}
+.drop:hover{background:var(--blue-xl)}
+.drop:hover::after{border-color:#aecbfa}
+body.dragging .drop{background:var(--blue-l)}
+body.dragging .drop::after{border-color:var(--blue)}
+.drop .dico{width:58px;height:58px;margin:0 auto 14px;display:grid;place-items:center;border-radius:50%;background:var(--blue-l);color:var(--blue)}
+.drop b{font-size:17px;display:block;margin-bottom:4px}
+.drop .sub{color:var(--ink2);font-size:13.5px;display:block}
+.drop .formats{color:var(--ink3);font-size:12px;margin-top:14px;display:block}
+
+.settings{display:flex;flex-wrap:wrap;gap:22px 32px;padding:20px 22px}
+.field{flex:1 1 200px;min-width:0}
+.field.wide{flex:2 1 340px}
+.lblrow{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
+.lbl{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+.lblrow output{font-weight:600;font-size:14px;color:var(--blue-ink);font-variant-numeric:tabular-nums}
+.tiny{font-size:12.5px;color:var(--ink2);margin:8px 0 0}
+.seg{display:flex;gap:4px;padding:4px;background:var(--bg3);border-radius:12px;margin-bottom:12px}
+.seg button{
+  flex:1 1 auto;min-width:0;
+  font:inherit;font-size:13px;font-weight:500;color:var(--ink2);background:transparent;border:0;border-radius:9px;
+  padding:7px 6px;cursor:pointer;transition:background .15s,color .15s,box-shadow .15s;white-space:nowrap;
+}
+.seg button:hover{color:var(--ink)}
+.seg button.on{background:var(--bg);color:var(--blue-ink);font-weight:600;box-shadow:0 1px 3px rgba(60,64,67,.2)}
+.smart input[type=range]{opacity:.5}
+.inrow{display:flex;gap:8px;align-items:center}
+.unit{font-size:13.5px;color:var(--ink2)}
+select,input[type=number],input[type=text],textarea{
+  font:inherit;font-size:14px;color:var(--ink);background:var(--bg);
+  border:1px solid var(--line);border-radius:10px;padding:9px 12px;min-height:42px;
+}
+select{
+  flex:1 1 auto;min-width:0;width:100%;-webkit-appearance:none;appearance:none;padding-right:36px;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2380868b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+}
+input[type=number]{width:104px;flex:0 0 auto}
+select:focus,input[type=number]:focus,input[type=text]:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--ring)}
+
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:24px;background:transparent;cursor:pointer;margin:0;display:block}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(90deg,var(--blue) var(--p,50%),var(--line) var(--p,50%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--blue);border:3px solid #fff;margin-top:-8px;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+input[type=range]::-moz-range-track{height:4px;border-radius:2px;background:var(--line)}
+input[type=range]::-moz-range-progress{height:4px;border-radius:2px;background:var(--blue)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--blue);border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+
+.opts{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px;padding:14px 22px;border-top:1px solid var(--line2);background:var(--bg2)}
+.check{display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer;user-select:none;margin:0}
+.check input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--blue);cursor:pointer;flex:0 0 auto}
+.check small{display:block;color:var(--ink2);font-size:12.5px}
+.linkbtn{font:inherit;font-size:13.5px;font-weight:500;color:var(--blue);background:transparent;border:0;padding:6px 8px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.linkbtn:hover{background:var(--blue-l)}
+.linkbtn.muted{color:var(--ink2)}
+.linkbtn.muted:hover{background:var(--bg3);color:var(--ink)}
+
+/* ================= Notes ================= */
+.note{margin-top:16px;padding:12px 16px;border-radius:12px;font-size:13.5px;display:flex;gap:10px;align-items:flex-start;
+  background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn)}
+.note.info{background:var(--blue-l);border-color:#c6dafc;color:var(--blue-ink)}
+.note svg{margin-top:2px}
+.note p{margin:0}
+
+/* ================= Buttons ================= */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  padding:9px 18px;min-height:42px;border-radius:10px;font:inherit;font-size:14px;font-weight:500;
+  border:1px solid var(--line);background:var(--bg);color:var(--blue);
+  text-decoration:none;cursor:pointer;white-space:nowrap;
+  transition:background .15s,border-color .15s,box-shadow .15s,opacity .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn:hover{background:var(--blue-xl);border-color:#c6dafc}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{background:var(--blue-d);border-color:var(--blue-d);box-shadow:0 1px 3px rgba(60,64,67,.3)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--ink2)}
+.btn.ghost:hover{background:var(--bg3);color:var(--ink)}
+.btn.sm{padding:6px 12px;min-height:36px;font-size:13px;border-radius:9px}
+.btn[disabled],.btn.disabled{opacity:.45;pointer-events:none}
+.iconbtn{width:36px;height:36px;border-radius:9px;border:0;background:transparent;color:var(--ink2);cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+.iconbtn:hover{background:var(--bg3);color:var(--ink)}
+.iconbtn.rm:hover{color:var(--err);background:var(--err-bg)}
+
+/* ================= Results ================= */
+.results{margin-top:22px}
+.list{display:grid;gap:10px}
+.card{
+  display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center;
+  padding:12px 12px 12px 14px;border:1px solid var(--line2);border-radius:var(--r);background:var(--bg);
+  animation:fade .2s ease both;
+}
+.chk{background:var(--bg) repeating-conic-gradient(var(--chk) 0 25%,transparent 0 50%) 0 0/14px 14px}
+.thumb{position:relative;width:64px;height:64px;border-radius:10px;overflow:hidden;border:1px solid var(--line2);display:grid;place-items:center}
+.thumb img{width:100%;height:100%;object-fit:contain;display:block}
+.thumb .spin{position:absolute;top:0;right:0;bottom:0;left:0;margin:auto}
+.card.busy .thumb img{opacity:.35}
+.card.err .thumb{background:var(--err-bg);color:var(--err)}
+.fname{font-size:14px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fname .dir{color:var(--ink3);font-weight:400}
+.fmeta{font-size:12.5px;color:var(--ink2);margin:3px 0 0;line-height:1.55}
+.fmeta .sep{opacity:.5;margin:0 4px}
+.fmeta .hint{display:block;color:var(--warn)}
+.fmeta .error{color:var(--err);font-weight:500}
+.pill{display:inline-block;font-weight:600;font-size:12px;padding:1px 8px;border-radius:999px;margin-right:6px;font-variant-numeric:tabular-nums}
+.pill.good{color:var(--ok);background:var(--ok-bg)}
+.pill.bad{color:var(--warn);background:var(--warn-bg)}
+.acts{display:flex;align-items:center;gap:4px}
+.spin{width:22px;height:22px;border-radius:50%;border:2.5px solid var(--line);border-top-color:var(--blue);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.actionbar{
+  position:sticky;bottom:0;z-index:20;margin-top:14px;
+  padding:12px 14px calc(12px + env(safe-area-inset-bottom));
+  background:var(--bg);
+  background:color-mix(in srgb,#fff 94%,transparent);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-lg);
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;
+}
+.sum{flex:1 1 280px;min-width:0}
+.sumtop{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.sumtop p{margin:0;font-size:13.5px;color:var(--ink2);min-width:0}
+.sumtop p b{color:var(--ink)}
+.sum .saved{color:var(--ok);font-weight:600}
+.mini{display:flex;gap:2px;flex:0 0 auto}
+.mini .linkbtn{font-size:13px;padding:4px 8px}
+.progress{height:4px;border-radius:2px;background:var(--line2);overflow:hidden}
+.progress span{display:block;height:100%;width:0;background:var(--blue);border-radius:2px;transition:width .25s}
+.grp{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* ================= Home sections ================= */
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.feat{border:1px solid var(--line2);border-radius:var(--r);padding:20px;background:var(--bg)}
+.feat .fi{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--blue-l);color:var(--blue);margin-bottom:12px}
+.feat h3{margin-bottom:6px}
+.feat p{font-size:13.5px;color:var(--ink2);margin:0}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.step{border:1px solid var(--line2);border-radius:var(--r);padding:18px 18px 14px;background:var(--bg)}
+.step .n{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--blue);color:#fff;font-weight:600;font-size:14px;margin-bottom:10px}
+.step h3{margin-bottom:6px}
+.step p{font-size:13.5px;color:var(--ink2);margin:0}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:860px;margin:0 auto}
+.fact{text-align:center;padding:18px;border-radius:var(--r);background:var(--bg2)}
+.fact b{display:block;font-size:26px;color:var(--blue);line-height:1.2;margin-bottom:4px}
+.fact span{font-size:13.5px;color:var(--ink2)}
+.faq-mini{max-width:780px;margin-left:auto;margin-right:auto}
+.center{text-align:center}
+
+/* ================= Docs bits ================= */
+.qtable{display:grid;gap:8px;margin:0 0 16px}
+.qtable div{display:grid;grid-template-columns:160px 1fr;gap:12px;padding:12px 14px;border:1px solid var(--line2);border-radius:12px;font-size:14px}
+.qtable b{color:var(--blue-ink)}
+details{border:1px solid var(--line2);border-radius:12px;margin:0 0 8px;background:var(--bg)}
+summary{cursor:pointer;padding:13px 44px 13px 16px;font-weight:500;list-style:none;position:relative}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";position:absolute;right:18px;top:50%;width:8px;height:8px;margin-top:-6px;
+  border-right:2px solid var(--ink3);border-bottom:2px solid var(--ink3);transform:rotate(45deg);transition:transform .18s}
+details[open] summary::after{transform:rotate(-135deg);margin-top:-2px}
+details > div{padding:0 16px 14px;color:var(--ink2);font-size:14px}
+details > div p:last-child{margin:0}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}
+.toc a{font-size:13px;padding:6px 12px;border:1px solid var(--line2);border-radius:999px;color:var(--ink2);text-decoration:none}
+.toc a:hover{border-color:#c6dafc;color:var(--blue);background:var(--blue-xl)}
+
+/* ================= Contact & About cards ================= */
+.cards2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:0 0 8px}
+.ccard{border:1px solid var(--line2);border-radius:var(--r);background:var(--bg);padding:20px}
+.ccard .lbl{display:block;margin-bottom:8px}
+.ccard .val{font-weight:500;margin:0 0 14px;word-break:break-all;min-height:1.6em}
+.person{display:flex;gap:16px;align-items:center;border:1px solid var(--line2);border-radius:var(--r);padding:20px;margin:0 0 8px}
+.avatar{width:56px;height:56px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:600;font-size:20px;flex:0 0 auto}
+.person h3{margin:0 0 2px}
+.person p{margin:0 0 10px;color:var(--ink2);font-size:14px}
+.form{display:grid;gap:14px;border:1px solid var(--line2);border-radius:var(--r);padding:20px;background:var(--bg2)}
+.form .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form label.flbl{display:block;font-size:13px;font-weight:500;margin-bottom:6px}
+.form input[type=text],.form select,.form textarea{width:100%}
+.form textarea{min-height:130px;resize:vertical;line-height:1.5}
+.form .foot-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.copied{font-size:13px;color:var(--ok);font-weight:500}
+a.val{display:block;color:var(--ink);text-decoration:none}
+.ccard .desc{color:var(--ink2);font-size:14px;margin:0 0 14px}
+a.val:hover{color:var(--blue);text-decoration:underline}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:300;
+  width:max-content;max-width:calc(100vw - 24px);display:flex;align-items:center;gap:10px;padding:10px 10px 10px 16px;
+  background:#202124;color:#fff;border-radius:12px;box-shadow:var(--shadow-lg);font-size:13.5px}
+.toast p{margin:0;min-width:0;overflow-wrap:anywhere}
+.toast .iconbtn{color:#bdc1c6}
+.toast .iconbtn:hover{background:rgba(255,255,255,.1);color:#fff}
+
+/* ================= Compare dialog ================= */
+dialog.cmp{
+  width:min(1100px,calc(100vw - 32px));height:min(860px,calc(100vh - 32px));height:min(860px,calc(100dvh - 32px));max-width:none;max-height:none;
+  padding:0;border:1px solid var(--line2);border-radius:18px;background:var(--bg);color:var(--ink);
+  box-shadow:var(--shadow-lg);overflow:hidden;
+}
+dialog.cmp[open]{display:flex;flex-direction:column}
+dialog.cmp::backdrop{background:rgba(32,33,36,.6)}
+.cmp-head{display:flex;align-items:center;gap:12px;padding:12px 12px 12px 18px;border-bottom:1px solid var(--line2)}
+.cmp-title{min-width:0;flex:1}
+.cmp-title b{display:block;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cmp-title span{display:block;font-size:12.5px;color:var(--ink2)}
+.cmp-stage{flex:1 1 auto;min-height:0;overflow:auto;display:flex;background:var(--bg2);overscroll-behavior:contain}
+.cmp-wrap{position:relative;margin:auto;flex:0 0 auto;line-height:0;touch-action:none;user-select:none;-webkit-user-select:none;cursor:ew-resize}
+.cmp-stage.actual .cmp-wrap{touch-action:auto;cursor:default}
+.cmp-wrap img{position:absolute;top:0;left:0;width:100%;height:100%;max-width:none;object-fit:fill;-webkit-user-drag:none;pointer-events:none}
+.cmp-stage.actual .cmp-wrap img{image-rendering:pixelated}
+.cmp-line{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.35);pointer-events:none}
+.cmp-line::after{content:"";position:absolute;top:50%;left:50%;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.4);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%235f6368' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6l-6 6 6 6M15 6l6 6-6 6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:center}
+.cmp-tag{position:absolute;top:10px;padding:3px 9px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font-size:12px;line-height:1.5;font-weight:500;pointer-events:none}
+.cmp-tag.l{left:10px}.cmp-tag.r{right:10px}
+.cmp-foot{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:12px 18px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line2)}
+.cmp-foot input[type=range]{flex:1 1 220px;width:auto}
+
+/* ================= Footer ================= */
+footer{border-top:1px solid var(--line);background:var(--foot)}
+.foot{max-width:1080px;margin:0 auto;padding:26px 18px calc(26px + env(safe-area-inset-bottom));font-size:13px;color:var(--ink2)}
+.foot-top{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.foot nav{display:flex;flex-wrap:wrap;gap:6px 20px}
+.foot a{color:var(--ink2);text-decoration:none}
+.foot a:hover{color:var(--blue)}
+.foot-bot{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;justify-content:space-between;padding-top:16px}
+.social{display:flex;gap:6px}
+.social a{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--ink2)}
+.social a:hover{background:#e3e3e3;color:var(--ink)}
+
+/* ================= Responsive ================= */
+@media (max-width:820px){
+  .features{grid-template-columns:1fr 1fr}
+}
+@media (max-width:760px){
+  .nav{display:none}
+  .menubtn{display:inline-flex}
+  .bar{height:58px;padding:0 10px 0 16px}
+  main{padding:24px 14px 64px}
+  .drop{padding:36px 16px 32px}
+  .drop .kbdhint{display:none}
+  .settings{padding:18px 16px;gap:22px}
+  .field,.field.wide{flex:1 1 100%}
+  .seg button{font-size:12.5px;padding:7px 3px}
+  .opts{padding:14px 16px}
+  .card{grid-template-columns:56px minmax(0,1fr);grid-template-areas:"thumb info" "acts acts";gap:10px 12px;padding:12px}
+  .thumb{width:56px;height:56px;grid-area:thumb}
+  .info{grid-area:info}
+  .acts{grid-area:acts;justify-content:flex-end;border-top:1px solid var(--line2);padding-top:8px}
+  .actionbar{border-radius:16px 16px 0 0;margin-left:-14px;margin-right:-14px;border-left:0;border-right:0;border-bottom:0}
+  .dlgrp{width:100%;flex-wrap:nowrap}
+  .dlgrp .btn{flex:1 1 0;min-width:0;padding:9px 10px;font-size:13.5px}
+  .dlgrp #share{flex:0 0 46px;padding:9px 0}
+  .dlgrp #share .t,.dlgrp #dlsep svg{display:none}
+  .features,.steps,.facts{grid-template-columns:1fr}
+  .section{margin-top:48px}
+  .qtable div{grid-template-columns:1fr;gap:2px}
+  .cards2,.form .row2{grid-template-columns:1fr}
+  dialog.cmp{width:100vw;height:100vh;height:100dvh;border-radius:0;border:0}
+  .cmp-foot .grp{width:100%}
+  .cmp-foot .grp .btn{flex:1 1 auto}
+}
+@media (max-width:359px){ .seg{gap:2px} .seg button{font-size:11.5px;padding:7px 1px} .dlgrp .btn{font-size:12.5px;padding:9px 6px} }
+@media (min-width:761px){ .mnav{display:none!important} }
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main" id="skip">Skip to content</a>
+
+<header class="topbar">
+  <div class="bar">
+    <a class="brand" href="#home" aria-label="WebP Studio home">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="2" y="2" width="20" height="20" rx="6" fill="#1a73e8"/>
+        <path d="M7 15.5l3.2-4.3 2.2 2.8 1.9-2.4 2.7 3.9H7z" fill="#fff"/>
+        <circle cx="9" cy="8.5" r="1.5" fill="#fff"/>
+      </svg>
+      WebP Studio
+    </a>
+
+    <nav class="nav" aria-label="Primary">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <div class="dd">
+        <button class="navbtn" id="legalBtn" type="button" aria-expanded="false" aria-controls="legalPanel">
+          Policies
+          <svg class="caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="ddpanel" id="legalPanel" hidden>
+          <a href="#disclaimer">Disclaimer</a>
+          <a href="#privacy">Privacy Policy</a>
+          <a href="#terms">Terms</a>
+        </div>
+      </div>
+      <a href="#contact">Contact</a>
+      <a href="#help">Help</a>
+    </nav>
+
+    <button class="menubtn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mnav">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+
+  <nav class="mnav" id="mnav" aria-label="Menu" hidden>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <p class="grp-lbl">Policies</p>
+    <div class="sub">
+      <a href="#disclaimer">Disclaimer</a>
+      <a href="#privacy">Privacy Policy</a>
+      <a href="#terms">Terms</a>
+    </div>
+    <a href="#contact">Contact</a>
+    <a href="#help">Help</a>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <!-- ================= HOME ================= -->
+  <section class="page" id="page-home">
+    <div class="hero">
+      <span class="eyebrow">Free · Private · No sign-up</span>
+      <h1>Convert images to WebP</h1>
+      <p>Turn PNG, JPG, GIF, AVIF, SVG and more into small, sharp WebP files, one at a time or hundreds at once. Everything happens on your device, so your images are never uploaded.</p>
+      <div class="chips-row" aria-label="Highlights">
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>No uploads</span>
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Bulk convert &amp; download</span>
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Target file size</span>
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Works on iPhone too</span>
+      </div>
+    </div>
+
+    <div class="tool">
+      <button class="drop" id="drop" type="button" aria-describedby="dropFormats">
+        <span class="dico" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        </span>
+        <b>Drop images here or tap to choose</b>
+        <span class="sub">Add one file or hundreds<span class="kbdhint"> · drop whole folders · or paste with <kbd class="kbd">Ctrl</kbd>+<kbd class="kbd">V</kbd></span></span>
+        <span class="formats" id="dropFormats">PNG · JPG · GIF · BMP · AVIF · WebP · SVG · ICO · HEIC &amp; TIFF in Safari</span>
+      </button>
+      <input type="file" id="file" accept="image/*,.heic,.heif,.tif,.tiff,.avif,.svg,.ico" multiple hidden>
+      <input type="file" id="folder" webkitdirectory multiple hidden>
+
+      <div class="settings">
+        <div class="field wide">
+          <div class="lblrow"><label class="lbl" for="quality">Quality</label><output id="qout" for="quality">Smart</output></div>
+          <div class="seg" role="group" aria-label="Quality presets">
+            <button type="button" data-mode="smart">Smart</button>
+            <button type="button" data-q="1">Lossless</button>
+            <button type="button" data-q="0.9">High</button>
+            <button type="button" data-q="0.8">Balanced</button>
+            <button type="button" data-q="0.65">Small</button>
+          </div>
+          <input type="range" id="quality" min="0.3" max="1" step="0.01" value="0.9">
+          <p class="tiny" id="qhint">Smart: lossless for PNG and graphics, High for JPG and other photos.</p>
+        </div>
+
+        <div class="field">
+          <div class="lblrow"><label class="lbl" for="maxside">Resize</label></div>
+          <div class="inrow">
+            <select id="maxside">
+              <option value="0">Original size</option>
+              <option value="4096">4096 px</option>
+              <option value="2560">2560 px</option>
+              <option value="1920">1920 px</option>
+              <option value="1280">1280 px</option>
+              <option value="800">800 px</option>
+              <option value="custom">Custom…</option>
+            </select>
+            <input type="number" id="custom" min="16" max="16384" step="1" value="1600" aria-label="Custom size in pixels" hidden>
+          </div>
+          <p class="tiny">Longest side. Photos are never enlarged; SVGs are drawn at this size.</p>
+        </div>
+
+        <div class="field">
+          <div class="lblrow"><label class="lbl" for="target">Max file size</label></div>
+          <div class="inrow">
+            <select id="target">
+              <option value="0">No limit</option>
+              <option value="1024">1 MB</option>
+              <option value="500">500 KB</option>
+              <option value="200">200 KB</option>
+              <option value="100">100 KB</option>
+              <option value="50">50 KB</option>
+              <option value="custom">Custom…</option>
+            </select>
+            <input type="number" id="targetCustom" min="5" max="102400" step="1" value="150" aria-label="Custom max file size in KB" hidden>
+            <span class="unit" id="targetUnit" hidden>KB</span>
+          </div>
+          <p class="tiny">Lowers quality only as much as needed to fit each file under this size.</p>
+        </div>
+      </div>
+
+      <div class="opts">
+        <label class="check"><input type="checkbox" id="clean"><span>SEO-friendly file names<small>“My Photo (1).PNG” → my-photo-1.webp</small></span></label>
+        <button class="linkbtn" id="folderBtn" type="button" hidden>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 11v5M9.5 13.5h5"/></svg>
+          Add a whole folder
+        </button>
+      </div>
+    </div>
+
+    <div class="note" id="note" role="status" hidden></div>
+    <p class="sr-only" id="live" aria-live="polite"></p>
+
+    <div class="results" id="results" hidden>
+      <div class="list" id="list"></div>
+      <div class="actionbar">
+        <div class="sum">
+          <div class="sumtop">
+            <p id="summary"></p>
+            <div class="mini">
+              <button class="linkbtn" id="retryFailed" type="button" hidden>Retry failed</button>
+              <button class="linkbtn muted" id="clear" type="button">Clear all</button>
+            </div>
+          </div>
+          <div class="progress" role="progressbar" aria-label="Conversion progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress"><span id="pbar"></span></div>
+        </div>
+        <div class="grp dlgrp" role="group" aria-label="Bulk download">
+          <button class="btn" id="share" type="button" aria-label="Share converted files" hidden>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M16 6l-4-4-4 4M12 2v13"/></svg>
+            <span class="t">Share</span>
+          </button>
+          <button class="btn" id="dlsep" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            <span id="dlsepTxt">Save separately</span>
+          </button>
+          <button class="btn primary" id="dlall" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+            <span id="dlallTxt">Download ZIP</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <section class="section" aria-labelledby="featTitle">
+      <h2 id="featTitle">Everything you need, nothing you don’t</h2>
+      <p class="sublead">A fast, focused converter with the options that matter for websites, blogs and everyday use.</p>
+      <div class="features">
+        <div class="feat"><div class="fi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Private by design</h3><p>Images are converted inside your browser. Nothing is uploaded, stored or shared.</p></div>
+        <div class="feat"><div class="fi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div><h3>Bulk convert &amp; download</h3><p>Add hundreds of images or whole folders. Download one ZIP, save files separately, or share them on your phone.</p></div>
+        <div class="feat"><div class="fi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3"/></svg></div><h3>Smart quality</h3><p>Lossless for graphics and screenshots, high quality for photos, picked automatically for each file.</p></div>
+        <div class="feat"><div class="fi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h10M4 17h6"/><path d="M17 15l2 2 3-4"/></svg></div><h3>Target file size</h3><p>Need every image under 100 KB? Set a limit and each file gets the best quality that fits.</p></div>
+        <div class="feat"><div class="fi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v16"/></svg></div><h3>Before / after compare</h3><p>Drag a slider across the original and the WebP, zoomed to fit or at actual pixels.</p></div>
+        <div class="feat"><div class="fi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div><h3>Works everywhere</h3><p>Chrome, Edge, Firefox, Safari, Android and iPhone. No app to install and no account.</p></div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="howTitle">
+      <h2 id="howTitle">How it works</h2>
+      <p class="sublead">Three steps, a few seconds.</p>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><h3>Add your images</h3><p>Drop, choose or paste them, or add a whole folder. Your files stay on your device the whole time.</p></div>
+        <div class="step"><div class="n">2</div><h3>Pick quality and size</h3><p>Smart works for most people. Optionally resize or set a max file size, then check results with Compare.</p></div>
+        <div class="step"><div class="n">3</div><h3>Download in bulk</h3><p>Get everything as one ZIP, save each file separately, or download just the ones you want.</p></div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="whyTitle">
+      <h2 id="whyTitle">Why WebP?</h2>
+      <p class="sublead">WebP is a modern image format created by Google. Smaller images mean faster pages, better Core Web Vitals and less mobile data.</p>
+      <div class="facts">
+        <div class="fact"><b>25–35%</b><span>smaller than JPEG at similar visual quality</span></div>
+        <div class="fact"><b>~26%</b><span>smaller than PNG when lossless</span></div>
+        <div class="fact"><b>All</b><span>major browsers can display WebP today</span></div>
+      </div>
+    </section>
+
+    <section class="section faq-mini" aria-labelledby="faqTitle">
+      <h2 id="faqTitle" class="center">Quick answers</h2>
+      <p class="sublead">More in <a href="#help">Help</a>.</p>
+      <details>
+        <summary>Is WebP Studio really free?</summary>
+        <div><p>Yes. There is no sign-up, no watermark and no limit on the number of images. The only limit is your device’s memory.</p></div>
+      </details>
+      <details>
+        <summary>Are my images uploaded anywhere?</summary>
+        <div><p>No. Conversion runs entirely in your browser, so your images never leave your device.</p></div>
+      </details>
+      <details>
+        <summary>How do I download many images at once?</summary>
+        <div><p>After converting, tap <strong>Download ZIP</strong> to get everything in one file, or <strong>Save separately</strong> to save each WebP as its own file. On phones you can also use <strong>Share</strong>.</p></div>
+      </details>
+      <details>
+        <summary>Which quality should I choose?</summary>
+        <div><p>Leave it on <strong>Smart</strong>. It keeps graphics and screenshots lossless and gives photos high quality at a much smaller size. See <a href="#help">Help</a> for details on each preset.</p></div>
+      </details>
+    </section>
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section class="page doc" id="page-about" hidden>
+    <h1>About WebP Studio</h1>
+    <p class="lead">A free, fast image converter that respects your privacy, made by Nachiket Gholap.</p>
+
+    <h2>What it does</h2>
+    <p>WebP Studio converts almost any common image into <strong>WebP</strong>, the modern image format developed by Google. WebP files are usually 25–35% smaller than JPEG or PNG files at similar visual quality. Smaller images make websites load faster, improve page-speed scores and use less data for everyone who visits.</p>
+
+    <h2>Who it’s for</h2>
+    <ul>
+      <li><strong>Bloggers and creators</strong> who want fast pages and images under a size limit.</li>
+      <li><strong>Web developers and designers</strong> preparing assets in bulk, with folder structure kept in the ZIP.</li>
+      <li><strong>Students and professionals</strong> who need to shrink images for forms, portals and email.</li>
+      <li><strong>Anyone</strong> who wants to save storage without installing software or creating an account.</li>
+    </ul>
+
+    <h2>How it works</h2>
+    <ul>
+      <li>Your image is opened directly by your browser. <strong>Nothing is uploaded</strong> to any server.</li>
+      <li>It is decoded at full resolution and drawn onto a canvas, with high-quality step-down scaling if you choose a smaller size.</li>
+      <li>The result is encoded with your browser’s built-in WebP encoder. Where the browser does not have one (Safari and all iPhone and iPad browsers), the open-source libwebp encoder runs on your device instead, in a background thread.</li>
+      <li>With a max file size set, the tool tries several quality levels and keeps the best one that fits.</li>
+      <li>Transparency is kept, and photo rotation data is applied so images appear the right way up.</li>
+    </ul>
+
+    <h2>Privacy first</h2>
+    <p>There are no accounts, cookies, analytics or ads. Your images and file names are never sent anywhere. Read the <a href="#privacy">Privacy Policy</a> for the full details.</p>
+
+    <h2>Built for speed</h2>
+    <p>The whole app is a single HTML file with no frameworks and no trackers. Images convert in a queue so the page stays responsive even with a large batch, and results update automatically when you change a setting.</p>
+
+    <h2>Made by</h2>
+    <div class="person">
+      <div class="avatar" aria-hidden="true">NG</div>
+      <div>
+        <h3>Nachiket Gholap</h3>
+        <p>Creator of WebP Studio. Feedback and ideas are always welcome.</p>
+        <div class="grp">
+          <a class="btn sm primary" href="https://www.linkedin.com/in/nachiketgholap/" target="_blank" rel="noopener noreferrer">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.2c0-1.2 0-2.9-1.8-2.9s-2 1.4-2 2.8V21h-4z"/></svg>
+            LinkedIn
+          </a>
+          <a class="btn sm" href="#contact" data-email-link data-email-only data-subject="WebP Studio">Email</a>
+        </div>
+      </div>
+    </div>
+
+    <h2>Credits</h2>
+    <ul>
+      <li>Fallback encoder: <a href="https://chromium.googlesource.com/webm/libwebp" target="_blank" rel="noopener noreferrer">libwebp</a> by Google (BSD licence), packaged for the web by the <a href="https://github.com/jamsinclair/jSquash" target="_blank" rel="noopener noreferrer">jSquash</a> project (Apache 2.0 licence), served by jsDelivr.</li>
+      <li>Typeface: Poppins (SIL Open Font Licence), served by Google Fonts.</li>
+    </ul>
+
+    <p>See <a href="#help">Help</a> for the full list of features, limitations and tips.</p>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section class="page doc" id="page-contact" hidden>
+    <h1>Contact</h1>
+    <p class="lead">Questions, feedback, a bug to report or a feature idea? I’d love to hear from you.</p>
+
+    <div class="cards2">
+      <div class="ccard" data-email-only>
+        <span class="lbl">Email</span>
+        <p class="desc">Email me with questions, feedback or bug reports.</p>
+        <a class="val" href="#contact" data-email-link data-email-text data-subject="WebP Studio"></a>
+        <div class="grp">
+          <a class="btn sm primary" href="#contact" data-email-link data-subject="WebP Studio">Send an email</a>
+          <button class="btn sm" id="copyEmail" type="button">Copy address</button>
+          <span class="copied" id="copiedMsg" role="status" hidden>Copied</span>
+        </div>
+      </div>
+      <div class="ccard">
+        <span class="lbl">LinkedIn</span>
+        <p class="desc">Connect with me or send me a message on LinkedIn.</p>
+        <div class="grp">
+          <a class="btn sm" href="https://www.linkedin.com/in/nachiketgholap/" target="_blank" rel="noopener noreferrer">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.2c0-1.2 0-2.9-1.8-2.9s-2 1.4-2 2.8V21h-4z"/></svg>
+            Connect on LinkedIn
+          </a>
+        </div>
+      </div>
+    </div>
+    <p class="tiny">I read every message and usually reply within 1–2 business days.</p>
+
+    <div data-email-only>
+    <h2>Write a message</h2>
+    <p>Fill this in and tap the button. It opens your own email app with everything ready, so nothing is sent until you press Send there.</p>
+    <div class="form">
+      <div class="row2">
+        <div><label class="flbl" for="cfName">Your name (optional)</label><input type="text" id="cfName" autocomplete="name"></div>
+        <div><label class="flbl" for="cfTopic">Topic</label>
+          <select id="cfTopic">
+            <option>Bug report</option>
+            <option>Feature request</option>
+            <option>Question</option>
+            <option>Feedback</option>
+            <option>Privacy or policies</option>
+          </select>
+        </div>
+      </div>
+      <div><label class="flbl" for="cfMsg">Message</label><textarea id="cfMsg" maxlength="1500" placeholder="What happened, or what would you like to see?"></textarea></div>
+      <div class="foot-row">
+        <label class="check"><input type="checkbox" id="cfInfo" checked><span>Add my browser details<small>Helps me fix bugs faster. Only included in the email you send.</small></span></label>
+        <a class="btn primary" id="cfSend" href="#contact">Open in email app</a>
+      </div>
+    </div>
+    </div>
+
+    <h2>What to include in a bug report</h2>
+    <ul>
+      <li>Your browser and version (for example, Chrome 131 on Windows 11, or Safari on iPhone).</li>
+      <li>The image format you tried (PNG, JPG, HEIC, GIF…) and roughly how large it was.</li>
+      <li>The settings you used (quality, resize, max file size).</li>
+      <li>What you expected, and what actually happened.</li>
+      <li>A screenshot of the problem, if possible.</li>
+    </ul>
+    <p><strong>Please do not attach private or sensitive photos.</strong> A screenshot or a small test image is enough. I never need your original files.</p>
+
+    <h2>What I can help with</h2>
+    <ul>
+      <li>Using the converter, quality settings, resizing and file-size limits.</li>
+      <li>Bug reports and unexpected behaviour.</li>
+      <li>Feature suggestions and format requests.</li>
+      <li>Questions about the Privacy Policy, Disclaimer or Terms.</li>
+    </ul>
+
+    <h2>What I can’t do</h2>
+    <ul>
+      <li>Recover, restore or convert files for you. Everything happens on your own device.</li>
+      <li>Give legal, copyright or other professional advice.</li>
+      <li>Offer phone or live chat support.</li>
+    </ul>
+
+    <h2>A note on response time</h2>
+    <p>WebP Studio is a small, independent project. I reply as soon as I can, but I cannot promise a specific turnaround. Clear, specific messages get faster answers. Thank you for using WebP Studio.</p>
+  </section>
+
+  <!-- ================= HELP ================= -->
+  <section class="page doc" id="page-help" hidden>
+    <h1>Help</h1>
+    <p class="lead">Everything you need to get great WebP files, plus what this tool can and cannot do.</p>
+    <nav class="toc" aria-label="On this page">
+      <a href="#h-start">Quick start</a><a href="#h-quality">Quality</a><a href="#h-options">Options</a><a href="#h-bulk">Bulk download</a><a href="#h-limits">Limitations</a><a href="#h-browsers">Browsers</a><a href="#h-faq">FAQ</a>
+    </nav>
+
+    <h2 id="h-start">Quick start</h2>
+    <ol>
+      <li>On <a href="#home">Home</a>, drop images (or a whole folder) onto the box, tap it to choose files, or paste a screenshot with <kbd class="kbd">Ctrl</kbd>+<kbd class="kbd">V</kbd> (<kbd class="kbd">⌘</kbd>+<kbd class="kbd">V</kbd> on Mac).</li>
+      <li>Leave quality on <strong>Smart</strong>, or pick another preset. Change it any time and your images re-convert automatically.</li>
+      <li>Optionally choose <strong>Resize</strong> and <strong>Max file size</strong>, and turn on <strong>SEO-friendly file names</strong>.</li>
+      <li>Tap <strong>Compare</strong> to check a result, then download each file, or everything at once with <strong>Download ZIP</strong> or <strong>Save separately</strong>.</li>
+    </ol>
+
+    <h2 id="h-quality">Choosing a quality</h2>
+    <div class="qtable">
+      <div><b>Smart (default)</b><span>Picks for each file: lossless for PNG, GIF, BMP, SVG and other graphics, and High for JPG, AVIF, HEIC and WebP photos. Already-compressed photos would only get bigger as lossless, so Smart avoids that.</span></div>
+      <div><b>Lossless (1.00)</b><span>Logos, screenshots, diagrams and anything with text. Keeps every pixel; files are larger.</span></div>
+      <div><b>High (0.90)</b><span>Photos where quality matters. Very hard to tell apart from the original.</span></div>
+      <div><b>Balanced (0.80)</b><span>Websites and blogs. Big savings and still crisp.</span></div>
+      <div><b>Small (0.65)</b><span>Thumbnails, previews and email, where size matters most.</span></div>
+    </div>
+    <p>You can also drag the slider to any value from 0.30 to 1.00. Each result shows the quality that was actually used.</p>
+
+    <h2 id="h-options">Options</h2>
+    <ul>
+      <li><strong>Resize:</strong> shrinks images so the longest side is at most the size you pick. Smaller images are never enlarged. SVGs are drawn at exactly this size, so you can export icons at any resolution.</li>
+      <li><strong>Max file size:</strong> each image gets the highest quality that fits under your limit (for example, 100 KB for a blog or a form upload). If an image cannot fit even at the lowest quality, the card tells you; choose a smaller Resize size and it will fit.</li>
+      <li><strong>SEO-friendly file names:</strong> turns names like “My Photo (1).PNG” into “my-photo-1.webp”: lowercase, hyphens instead of spaces, no special characters. Letters in any language are kept.</li>
+      <li><strong>Folders:</strong> drop a folder onto the box, or use “Add a whole folder” on a computer. All images inside, including subfolders, are added, and the ZIP keeps the same folder structure.</li>
+      <li>Your settings are remembered on this device for next time.</li>
+    </ul>
+
+    <h2 id="h-bulk">Bulk download</h2>
+    <ul>
+      <li><strong>Download ZIP:</strong> every converted image in a single ZIP file. Best for large batches and folders.</li>
+      <li><strong>Save separately:</strong> saves each WebP as its own file, one after another. Your browser may ask once to allow multiple downloads; choose Allow.</li>
+      <li><strong>Share (phones):</strong> sends all converted images straight to another app, such as Photos, Files or WhatsApp.</li>
+      <li><strong>One at a time:</strong> use the WebP button on any card. Remove cards you don’t want before downloading in bulk.</li>
+    </ul>
+
+    <h2>What it can do</h2>
+    <ul>
+      <li>Convert PNG, JPG, GIF, BMP, AVIF, WebP, SVG and ICO, plus HEIC and TIFF in Safari.</li>
+      <li>Convert hundreds of images or whole folders in one go.</li>
+      <li>Hit a target file size automatically.</li>
+      <li>Compare the original and the WebP side by side with a slider, at fit or actual size.</li>
+      <li>Keep transparency, and turn photos the right way up using their rotation data.</li>
+      <li>Work on desktop, tablet and phone, including iPhone and iPad.</li>
+    </ul>
+
+    <h2 id="h-limits">What it cannot do</h2>
+    <ul>
+      <li>Animated GIFs and animated WebPs become a single still image (the first frame).</li>
+      <li>Metadata such as EXIF, GPS location and colour profiles is not copied. This is good for privacy, but wide-colour photos are converted to standard sRGB colour.</li>
+      <li>HEIC/HEIF and TIFF open only in Safari (Mac, iPhone and iPad). In other browsers, convert them to JPG or PNG first.</li>
+      <li>Every browser has a size limit for images. Very large images are scaled down automatically to fit, and the card tells you when this happens. On iPhone and iPad the limit is about 16.7 megapixels.</li>
+      <li>SVGs are turned into pixels, so they are no longer vector graphics.</li>
+      <li>A ZIP can hold up to 65,535 files and 4 GB. For bigger batches, use Save separately or convert in parts.</li>
+      <li>Nothing is saved. Closing or reloading the tab clears your list.</li>
+    </ul>
+
+    <h2 id="h-browsers">Browser support</h2>
+    <ul>
+      <li><strong>Chrome, Edge, Opera, Brave and Samsung Internet:</strong> use the browser’s own WebP encoder. Fastest, and Lossless gives true lossless WebP.</li>
+      <li><strong>Firefox:</strong> uses its own WebP encoder (Firefox 96 or newer).</li>
+      <li><strong>Safari, and every browser on iPhone and iPad:</strong> these cannot create WebP files by themselves, so WebP Studio loads a small open-source encoder (libwebp, about 280 KB) once. Results are just as good, a little slower. Your images still never leave your device.</li>
+    </ul>
+
+    <h2 id="h-faq">Questions</h2>
+    <details>
+      <summary>Are my images really not uploaded?</summary>
+      <div><p>Yes. Your images are read and converted by your own browser. No image, file name or thumbnail is sent anywhere. You can even turn off your internet after the page has loaded (on Safari and iPhone, after the first conversion) and the tool keeps working.</p></div>
+    </details>
+    <details>
+      <summary>Why is my WebP bigger than the original?</summary>
+      <div><p>This usually happens when an already-compressed photo (like a JPG) is saved as Lossless, or with very small graphics. Use Smart, High or Balanced, or set a Max file size. Cards that grew are marked in yellow.</p></div>
+    </details>
+    <details>
+      <summary>My browser asks to allow multiple downloads</summary>
+      <div><p>That happens with <strong>Save separately</strong>. Choose Allow and the rest will save. To avoid the question, use <strong>Download ZIP</strong>, which saves everything in a single download.</p></div>
+    </details>
+    <details>
+      <summary>How do I open the ZIP file on my phone?</summary>
+      <div><p>On iPhone, open the Files app and tap the ZIP to unpack it. On Android, open it in Files by Google (or your phone’s file manager) and tap Extract. Or skip the ZIP and use <strong>Share</strong> or <strong>Save separately</strong>.</p></div>
+    </details>
+    <details>
+      <summary>An image couldn’t reach my max file size</summary>
+      <div><p>Very large or detailed images may not fit a small limit even at the lowest quality. Pick a smaller <strong>Resize</strong> size (for example 1280 px) and it will usually fit easily.</p></div>
+    </details>
+    <details>
+      <summary>A very large image failed or the page slowed down</summary>
+      <div><p>Set <strong>Resize</strong> to 4096 px (or smaller) and tap Retry. Converting fewer huge images at a time also helps on phones.</p></div>
+    </details>
+    <details>
+      <summary>My HEIC photo will not open</summary>
+      <div><p>Only Safari can read HEIC. Open this page in Safari, or convert the photo to JPG first. On iPhone, photos you pick from your library are usually handed over as JPG automatically.</p></div>
+    </details>
+    <details>
+      <summary>Where are my converted files stored?</summary>
+      <div><p>Only in your browser’s memory, until you download them or close the tab. Nothing is kept afterwards.</p></div>
+    </details>
+
+    <h2>Still stuck?</h2>
+    <p>Message me on <a href="https://www.linkedin.com/in/nachiketgholap/" target="_blank" rel="noopener noreferrer">LinkedIn</a><span data-email-only>, email <a href="#contact" data-email-link data-email-text data-subject="WebP Studio help"></a></span>, or visit the <a href="#contact">Contact</a> page. Always keep a backup of your originals; see the <a href="#disclaimer">Disclaimer</a>.</p>
+  </section>
+
+  <!-- ================= DISCLAIMER ================= -->
+  <section class="page doc" id="page-disclaimer" hidden>
+    <h1>Disclaimer</h1>
+    <p class="lead">Last updated: 19 November 2026</p>
+
+    <p>WebP Studio (“the tool”, “this website”) is created and operated by Nachiket Gholap (“I”, “me”). Please read this disclaimer carefully before using the tool. By using it, you accept this disclaimer in full. If you disagree with any part of it, please do not use the tool.</p>
+
+    <h2>1. As is, as available</h2>
+    <p>The tool is provided on an “as is” and “as available” basis. It is a free, browser-based utility offered in good faith. I make no representation or warranty of any kind that it will be available, uninterrupted, error-free, secure, or fit for any particular purpose.</p>
+
+    <h2>2. No warranties</h2>
+    <p>To the maximum extent permitted by applicable law, I disclaim all warranties, whether express, implied, statutory or otherwise, including but not limited to any implied warranties of merchantability, fitness for a particular purpose, title, accuracy and non-infringement. No advice or information, oral or written, obtained from me or through the tool creates any warranty not expressly stated here.</p>
+
+    <h2>3. Results are not guaranteed</h2>
+    <ul>
+      <li>Conversion quality, file size and compatibility depend on the WebP encoder used (your browser’s built-in encoder, or the libwebp fallback encoder), your operating system and your device.</li>
+      <li>Different browsers may produce different file sizes and slightly different pixels from the same image, even at the same settings.</li>
+      <li>The Lossless setting requests lossless WebP encoding, but I cannot guarantee pixel-identical results in every browser or version. For example, semi-transparent pixels and colour-managed images may change slightly when drawn to a canvas.</li>
+      <li>The Max file size option is a best effort. Some images cannot reach a small limit without resizing.</li>
+      <li>Some formats (for example HEIC/HEIF, TIFF and animated GIF) may not open, or may open only partly, depending on the browser.</li>
+      <li>Images larger than your browser’s limits are scaled down automatically.</li>
+    </ul>
+
+    <h2>4. Your files, your responsibility</h2>
+    <p>All processing happens locally in your browser. You are solely responsible for your files. <strong>Always keep a backup of your original images.</strong> I am not able to recover, restore or retrieve any file, and I cannot help you undo a conversion.</p>
+
+    <h2>5. No liability</h2>
+    <p>To the fullest extent permitted by law, <strong>I do not have any liability</strong> for any loss or damage of any kind arising out of or in connection with your use of, or inability to use, this tool. This includes, without limitation:</p>
+    <ul>
+      <li>loss, corruption or alteration of files or data;</li>
+      <li>loss of profit, revenue, business, goodwill or anticipated savings;</li>
+      <li>indirect, incidental, special, consequential, exemplary or punitive damages;</li>
+      <li>damage caused by browser bugs, device failures, power loss or misuse;</li>
+      <li>any loss arising from reliance on the output of the tool.</li>
+    </ul>
+    <p>This limitation applies regardless of the legal theory (contract, tort, negligence, strict liability or otherwise) and even if I have been advised of the possibility of such damage. Because the tool is provided free of charge, this limitation is a fundamental basis of your use of it.</p>
+    <p>Nothing in this disclaimer excludes or limits liability that cannot be excluded or limited under applicable law.</p>
+
+    <h2>6. Third parties and external links</h2>
+    <p>The tool loads a font from Google Fonts. In browsers that cannot create WebP files themselves (such as Safari), it also loads the open-source libwebp encoder from the jsDelivr content delivery network. The site links to external websites such as LinkedIn. These services and sites are not under my control, and I am not responsible for their content, availability, policies or practices.</p>
+
+    <h2>7. Not professional advice</h2>
+    <p>Nothing on this website is legal, financial, medical or other professional advice. Information about image formats and browser support is provided for general guidance and may change over time.</p>
+
+    <h2>8. Lawful use</h2>
+    <p>You agree to use the tool only for lawful purposes and only with images you have the right to process. You are responsible for complying with copyright and any other applicable law.</p>
+
+    <h2>9. Changes</h2>
+    <p>I may update this disclaimer at any time. The version published on this page is the current one.</p>
+
+    <h2>10. Contact</h2>
+    <p>Questions about this disclaimer: <a href="#contact" data-email-link data-email-text data-subject="WebP Studio disclaimer">see the Contact page</a>.</p>
+  </section>
+
+  <!-- ================= PRIVACY ================= -->
+  <section class="page doc" id="page-privacy" hidden>
+    <h1>Privacy Policy</h1>
+    <p class="lead">Last updated: 19 November 2026</p>
+
+    <p>This policy explains what happens to your information when you use WebP Studio, which is operated by Nachiket Gholap. The short version: your images never leave your device, and I do not collect personal data.</p>
+
+    <h2>1. Images are processed locally</h2>
+    <p>Every image you select is read directly by your browser and converted on your device. <strong>No image, thumbnail, file name, folder name or file content is uploaded to any server.</strong> Converted files exist only in your browser’s memory until you download them or close the page. This is true for both your browser’s built-in encoder and the libwebp fallback encoder, which also runs entirely on your device.</p>
+
+    <h2>2. What I do not collect</h2>
+    <ul>
+      <li>No images or files.</li>
+      <li>No account, name, address or phone number.</li>
+      <li>No cookies, tracking pixels or advertising identifiers.</li>
+      <li>No analytics or usage statistics.</li>
+      <li>No server-side logs of your activity, because there is no application server handling your files.</li>
+    </ul>
+
+    <h2>3. What stays on your device</h2>
+    <ul>
+      <li><strong>Your settings.</strong> Your quality, resize, max file size and file-name choices are saved in your browser’s local storage so they are remembered next time. They never leave your device. You can remove them by clearing this site’s data in your browser settings.</li>
+      <li><strong>Temporary files.</strong> Temporary object URLs (blob URLs) are created in your browser’s memory so you can preview, compare and download results. They are released when you remove an item, clear the list or close the tab. I cannot access them.</li>
+    </ul>
+
+    <h2>4. Contact form and email</h2>
+    <p>The form on the Contact page does not send anything by itself. It only prepares a message and opens your own email app. If you choose to include browser details, they are added to that draft so you can see and edit them before sending. The “Copy address” button only copies my email address to your clipboard.</p>
+    <p>If you email me, your email provider and mine will process the message and its metadata (your address, subject, time and any attachments). I use it only to read and reply to you. I do not add you to any mailing list. I keep ordinary correspondence only as long as needed for the conversation and any legal obligations, then delete it. Please do not send me private or sensitive images.</p>
+
+    <h2>5. Third-party requests</h2>
+    <p><strong>Google Fonts.</strong> The page loads the Poppins font from Google Fonts. To deliver the font, your browser contacts Google’s servers, which receive standard technical information such as your IP address, browser user-agent and the page you are visiting. Google handles that data under its own privacy policy: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">policies.google.com/privacy</a>. If you block this request, the tool still works and uses your system font.</p>
+    <p><strong>jsDelivr.</strong> Only in browsers that cannot create WebP files themselves (such as Safari and all iPhone and iPad browsers), the page downloads the open-source libwebp encoder from the jsDelivr content delivery network the first time you convert an image. Only program code is downloaded; your images are never sent. Like any web server, jsDelivr receives standard technical information such as your IP address and user-agent. See <a href="https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net" target="_blank" rel="noopener noreferrer">jsDelivr’s privacy policy</a>.</p>
+    <p><strong>LinkedIn.</strong> The site links to my LinkedIn profile. Nothing is loaded from LinkedIn unless you click the link; after that, LinkedIn’s own privacy policy applies.</p>
+
+    <h2>6. Legal bases (where GDPR applies)</h2>
+    <p>Where the GDPR applies: I have a legitimate interest in answering messages sent to me and in keeping the website working. Because I do not collect personal data through the tool itself, no consent, contract or other basis is needed for the conversion feature. Settings saved in local storage are strictly necessary for the feature you asked for and stay on your device. Google Fonts and jsDelivr processing is described above and is outside my control.</p>
+
+    <h2>7. Children</h2>
+    <p>The tool is not directed at children, and I knowingly collect no personal information from anyone, including children under 13 (or the applicable age in your country).</p>
+
+    <h2>8. Security</h2>
+    <p>Because there is no application server storing your files, there is no server-side database to breach. Your files stay inside your browser’s sandbox. Still, no software is perfectly secure, and you should keep your own backups of important images.</p>
+
+    <h2>9. Your rights</h2>
+    <p>Depending on where you live, you may have rights to access, correct, delete, restrict or object to processing of your personal data, and to complain to a supervisory authority. Because I store almost no personal data, most requests will simply confirm that there is nothing to return. You can exercise any right by emailing me.</p>
+
+    <h2>10. International transfers</h2>
+    <p>I do not transfer your data internationally. Google Fonts and jsDelivr may process technical data in the countries where they operate, under their own safeguards.</p>
+
+    <h2>11. Changes</h2>
+    <p>If this policy changes, the new version will be published on this page with an updated date.</p>
+
+    <h2>12. Contact</h2>
+    <p>Nachiket Gholap · <a href="#contact" data-email-link data-email-text data-subject="WebP Studio privacy">see the Contact page</a></p>
+  </section>
+
+  <!-- ================= TERMS ================= -->
+  <section class="page doc" id="page-terms" hidden>
+    <h1>Terms of Use</h1>
+    <p class="lead">Last updated: 19 November 2026</p>
+
+    <p>These terms govern your use of WebP Studio, which is created and operated by Nachiket Gholap (“I”, “me”, “the operator”). By using the tool you agree to them. If you do not agree, please do not use the tool.</p>
+
+    <h2>1. The service</h2>
+    <p>WebP Studio is a free, browser-based image converter, provided for convenience and for personal or commercial projects. It is not a hosted file-processing service: all conversion happens on your own device.</p>
+
+    <h2>2. Licence to use</h2>
+    <p>You may use the tool free of charge for personal and commercial work. You may not resell, sublicense, repackage or redistribute the tool itself, or present it as your own product, without written permission. Open-source components keep their own licences (see section 9).</p>
+
+    <h2>3. Intellectual property</h2>
+    <ul>
+      <li>The website’s design, code, text and branding belong to Nachiket Gholap, except for the open-source components listed in section 9.</li>
+      <li><strong>Your images remain yours.</strong> I claim no rights over them, and because I never receive them, I could not use them even if I wanted to.</li>
+      <li>You are responsible for having the right to process the images you select, and for how you use the output.</li>
+    </ul>
+
+    <h2>4. Acceptable use</h2>
+    <p>You agree not to:</p>
+    <ul>
+      <li>use the tool for anything unlawful, infringing or harmful;</li>
+      <li>process content you do not have permission to process;</li>
+      <li>attempt to disrupt, overload or reverse-engineer the website in a way that harms others;</li>
+      <li>remove or obscure attribution where it is required by law.</li>
+    </ul>
+
+    <h2>5. No warranty</h2>
+    <p>The tool is provided “as is” and “as available”, without warranties of any kind, express or implied, including merchantability, fitness for a particular purpose, accuracy and non-infringement. I do not warrant that conversion will be error-free, lossless, within a particular file size, or compatible with your target platform.</p>
+
+    <h2>6. Limitation of liability</h2>
+    <p>To the maximum extent permitted by law, <strong>I do not have any liability</strong> for any direct, indirect, incidental, special, consequential, exemplary or punitive damages, or for any loss of files, data, profit, revenue, business or goodwill, arising from or related to your use of, or inability to use, the tool, whether based on contract, tort, negligence, strict liability or any other theory, and even if advised of the possibility of such damage.</p>
+    <p>You are responsible for keeping backups of your original images. The tool is free, and this limitation is a fundamental basis on which it is offered.</p>
+    <p>Nothing in these terms limits liability that cannot be limited by law.</p>
+
+    <h2>7. Indemnity</h2>
+    <p>You agree to indemnify and hold harmless the operator from any claim, loss or expense (including reasonable legal fees) arising from your use of the tool, your images, or your breach of these terms.</p>
+
+    <h2>8. Availability and changes</h2>
+    <p>The tool may be changed, suspended or discontinued at any time without notice. Features may be added or removed. These terms may also be updated; the current version is always on this page.</p>
+
+    <h2>9. Third-party services and open-source components</h2>
+    <p>The site uses Google Fonts (Poppins, SIL Open Font Licence). In browsers without a built-in WebP encoder, it loads libwebp (BSD licence) as packaged by the jSquash project (Apache 2.0 licence) from jsDelivr. The site links to LinkedIn. Their availability and terms are outside my control.</p>
+
+    <h2>10. Governing law and jurisdiction</h2>
+    <p>These terms are governed by the laws of India, without regard to conflict-of-law rules. Any dispute will be subject to the exclusive jurisdiction of the courts of India, except where consumer law gives you the right to bring proceedings in your own country.</p>
+
+    <h2>11. Severability and entire agreement</h2>
+    <p>If any provision is found unenforceable, the remaining provisions stay in force. These terms, together with the Privacy Policy and Disclaimer, are the entire agreement between us regarding the tool.</p>
+
+    <h2>12. Contact</h2>
+    <p>Nachiket Gholap · <a href="#contact" data-email-link data-email-text data-subject="WebP Studio terms">see the Contact page</a></p>
+  </section>
+
+  <noscript><p style="text-align:center;margin-top:24px">WebP Studio needs JavaScript to convert images. Please enable it and reload the page.</p></noscript>
+</main>
+
+<footer>
+  <div class="foot">
+    <div class="foot-top">
+      <span><strong style="color:var(--ink)">WebP Studio</strong> · Images are converted in your browser and never uploaded.</span>
+      <nav aria-label="Footer">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#disclaimer">Disclaimer</a>
+        <a href="#privacy">Privacy Policy</a>
+        <a href="#terms">Terms</a>
+        <a href="#contact">Contact</a>
+        <a href="#help">Help</a>
+      </nav>
+    </div>
+    <div class="foot-bot">
+      <span>© <span id="year">2026</span> Nachiket Gholap. All rights reserved.</span>
+      <div class="social">
+        <a href="https://www.linkedin.com/in/nachiketgholap/" target="_blank" rel="noopener noreferrer" aria-label="Nachiket Gholap on LinkedIn" title="LinkedIn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.2c0-1.2 0-2.9-1.8-2.9s-2 1.4-2 2.8V21h-4z"/></svg>
+        </a>
+        <a href="#contact" data-email-link data-email-only aria-label="Email Nachiket Gholap" title="Email">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" hidden>
+  <p id="toastText"></p>
+  <button class="btn sm primary" id="toastCopy" type="button">Copy</button>
+  <button class="iconbtn" id="toastClose" type="button" aria-label="Close">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+</div>
+
+<!-- ================= Compare dialog ================= -->
+<dialog class="cmp" id="cmp" aria-labelledby="cmpTitle">
+  <div class="cmp-head">
+    <div class="cmp-title"><b id="cmpTitle"></b><span id="cmpMeta"></span></div>
+    <button class="iconbtn" id="cmpClose" type="button" aria-label="Close comparison">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="cmp-stage" id="cmpStage">
+    <div class="cmp-wrap chk" id="cmpWrap">
+      <img id="cmpA" alt="Original image" draggable="false">
+      <img id="cmpB" alt="Converted WebP image" draggable="false">
+      <span class="cmp-line" id="cmpLine"></span>
+      <span class="cmp-tag l">Original</span>
+      <span class="cmp-tag r">WebP</span>
+    </div>
+  </div>
+  <div class="cmp-foot">
+    <input type="range" id="cmpRange" min="0" max="100" step="0.1" value="50" aria-label="Divider position: left shows the original, right shows the WebP">
+    <div class="grp">
+      <button class="btn sm" id="cmpZoom" type="button">Actual pixels</button>
+      <a class="btn sm primary" id="cmpDl" download>Download WebP</a>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(() => {
+  "use strict";
+
+  /* =============== Your details =============== */
+  // >>> Put your email address between the quotes. Every email link and button on the site uses it. <<<
+  const EMAIL = "YOUR_EMAIL_HERE";
+
+  /* =============== Config =============== */
+  // Fallback WebP encoder (libwebp \u2192 WebAssembly), used only where the browser can't encode WebP itself (Safari / iOS).
+  const ENCODER_URL = "https://cdn.jsdelivr.net/npm/@jsquash/webp@1.5.0/codec/enc/webp_enc.js";
+  const STORE_KEY = "webpstudio.settings.v2";
+
+  /* =============== Helpers =============== */
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  // Yield so progress can paint. Background tabs never run requestAnimationFrame, so there we yield
+  // with a message (not throttled) and add a timeout safety net in case the tab is hidden mid-wait.
+  const yieldTask = (() => {
+    const ch = new MessageChannel(), waiting = [];
+    ch.port1.onmessage = () => { const f = waiting.shift(); if (f) f(); };
+    return () => new Promise((r) => { waiting.push(r); ch.port2.postMessage(0); });
+  })();
+  const nextFrame = () => document.hidden ? yieldTask() : new Promise((r) => {
+    let fired = false; const fin = () => { if (!fired) { fired = true; r(); } };
+    requestAnimationFrame(fin); setTimeout(fin, 100);
+  });
+  const err = (code, message) => Object.assign(new Error(message), { code });
+
+  function bytes(n) {
+    if (n == null || isNaN(n)) return "\u2014";
+    if (n < 1024) return n + " B";
+    const u = ["KB", "MB", "GB"]; let v = n / 1024, i = 0;
+    while (v >= 1024 && i < u.length - 1) { v /= 1024; i++; }
+    return (v >= 100 ? v.toFixed(0) : v >= 10 ? v.toFixed(1) : v.toFixed(2)) + " " + u[i];
+  }
+  function pctText(before, after) {
+    const p = before ? ((after - before) / before) * 100 : 0;
+    return { p, txt: (p <= 0 ? "\u2212" : "+") + Math.abs(p).toFixed(Math.abs(p) >= 10 ? 0 : 1) + "%" };
+  }
+  function baseName(name) {
+    let b = String(name || "image").replace(/\.[^./\\]+$/, "").replace(/[\\/:*?"<>|\u0000-\u001f]+/g, "-").trim();
+    b = Array.from(b).slice(0, 120).join("").replace(/[. ]+$/, "");         // keep names short enough for every OS
+    if (/^(con|prn|aux|nul|com[0-9]|lpt[0-9])$/i.test(b)) b += "-image";     // names Windows can't save
+    return b || "image";
+  }
+  // Built at run time: a regex literal with \p{...} would stop the whole script parsing in older browsers.
+  let LETTERS_RE = null;
+  try { LETTERS_RE = new RegExp("[^\\p{L}\\p{M}\\p{N}]+", "gu"); } catch (e) { /* older browser */ }
+  function slugify(s) {
+    let t = String(s).normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    t = LETTERS_RE ? t.replace(LETTERS_RE, "-") : t.replace(/[^a-z0-9\u00c0-\uffff]+/g, "-");
+    return t.replace(/-+/g, "-").replace(/^-|-$/g, "") || "image";
+  }
+  const ext = (name) => (String(name).match(/\.([^./\\]+)$/) || [, ""])[1].toLowerCase();
+  const isSvg = (f) => f.type === "image/svg+xml" || ext(f.name) === "svg";
+
+  const store = {
+    get() { try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}") || {}; } catch (e) { return {}; } },
+    set(v) { try { localStorage.setItem(STORE_KEY, JSON.stringify(v)); } catch (e) { /* private mode etc. */ } }
+  };
+
+  /* =============== Email links (all built from EMAIL above) =============== */
+  const mailto = (subject, body) => "mailto:" + EMAIL +
+    (subject || body ? "?" + [subject ? "subject=" + encodeURIComponent(subject) : "", body ? "body=" + encodeURIComponent(body) : ""].filter(Boolean).join("&") : "");
+  const HAS_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(EMAIL);
+  const LINKEDIN = "https://www.linkedin.com/in/nachiketgholap/";
+  if (HAS_EMAIL) {
+    $$("[data-email-link]").forEach((a) => { a.href = mailto(a.dataset.subject); });
+    $$("[data-email-text]").forEach((el) => { el.textContent = EMAIL; });
+  } else {
+    // No address configured: never show a placeholder. Hide email-only parts; other links keep pointing to Contact.
+    $$("[data-email-only]").forEach((el) => { el.hidden = true; });
+  }
+
+  /* =============== Capabilities =============== */
+  const NATIVE = (() => {
+    try { const c = document.createElement("canvas"); c.width = c.height = 1; return c.toDataURL("image/webp").indexOf("data:image/webp") === 0; }
+    catch (e) { return false; }
+  })();
+  const MAX_SIDE = 16384;
+  const MAX_AREA = NATIVE ? 268435456 : 16777216; // Chrome/Firefox \u2248 268 MP; Safari/iOS canvas \u2248 16.7 MP
+  const COARSE = !!(window.matchMedia && matchMedia("(pointer: coarse)").matches);
+  const CONCURRENCY = (() => {
+    if (!NATIVE) return 1;
+    const mem = navigator.deviceMemory || 4, cores = navigator.hardwareConcurrency || 2;
+    return (COARSE || mem <= 4 || cores <= 2) ? 1 : 2;
+  })();
+  const CAN_SHARE = (() => {
+    try { return COARSE && !!(navigator.canShare && navigator.canShare({ files: [new File([new Uint8Array(1)], "t.webp", { type: "image/webp" })] })); }
+    catch (e) { return false; }
+  })();
+  const CAN_FOLDER = !COARSE && "webkitdirectory" in document.createElement("input");
+
+  /* =============== DOM =============== */
+  const dropEl = $("#drop"), fileEl = $("#file"), folderEl = $("#folder"), noteEl = $("#note");
+  const qualityEl = $("#quality"), qoutEl = $("#qout"), qhintEl = $("#qhint");
+  const maxSel = $("#maxside"), customEl = $("#custom");
+  const targetSel = $("#target"), targetCustom = $("#targetCustom"), targetUnit = $("#targetUnit");
+  const cleanEl = $("#clean"), folderBtn = $("#folderBtn");
+  const resultsEl = $("#results"), listEl = $("#list"), summaryEl = $("#summary"), pbar = $("#pbar"), progEl = $("#progress");
+  const dlAllEl = $("#dlall"), dlAllTxt = $("#dlallTxt"), dlSepEl = $("#dlsep"), dlSepTxt = $("#dlsepTxt");
+  const clearEl = $("#clear"), shareEl = $("#share"), retryFailedEl = $("#retryFailed");
+
+  /* =============== State =============== */
+  const saved = store.get();
+  const state = {
+    mode: saved.mode === "manual" ? "manual" : "smart",
+    q: clampQ(saved.q != null ? saved.q : 0.9),
+    max: saved.max > 0 ? clampMax(saved.max) : 0,
+    target: saved.target > 0 ? clampTarget(saved.target) : 0, // KB
+    clean: saved.clean === true,
+    items: []
+  };
+  let zipping = false, savingSep = false, current = "", wasBusy = false;
+  const liveEl = $("#live");
+
+  function clampQ(q) { q = parseFloat(q); return isNaN(q) ? 0.9 : Math.min(1, Math.max(0.3, Math.round(q * 100) / 100)); }
+  function clampMax(v) { v = parseInt(v, 10); return isNaN(v) ? 1600 : Math.max(16, Math.min(MAX_SIDE, v)); }
+  function clampTarget(v) { v = parseInt(v, 10); return isNaN(v) ? 150 : Math.max(5, Math.min(102400, v)); }
+  const settingsKey = () => (state.mode === "smart" ? "smart" : state.q.toFixed(2)) + "|" + state.max + "|" + state.target;
+  // Smart: already-lossy sources (JPG, AVIF, HEIC, WebP) \u2192 High; everything else (PNG, GIF, BMP, SVG\u2026) \u2192 lossless.
+  const LOSSY_RE = /^(jpe?g|jfif|pjpeg|avif|heic|heif|webp)$/;
+  function qualityFor(file) {
+    if (state.mode !== "smart") return state.q;
+    const t = (file.type || "").replace("image/", "");
+    return LOSSY_RE.test(t) || LOSSY_RE.test(ext(file.name)) ? 0.9 : 1;
+  }
+  const outBase = (it) => state.clean ? slugify(baseName(it.file.name)) : baseName(it.file.name);
+  const outName = (it) => outBase(it) + ".webp";
+
+  /* =============== Notes =============== */
+  const ICON_INFO = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" class="ico"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>';
+  const FALLBACK_INFO = "Your browser can\u2019t create WebP files by itself, so WebP Studio will use the open-source libwebp encoder (downloaded once, about 280 KB). Your images still never leave your device.";
+  let noteTimer = 0;
+  function showNote(html, kind, ms) {
+    clearTimeout(noteTimer);
+    noteEl.className = "note" + (kind === "info" ? " info" : "");
+    noteEl.innerHTML = ICON_INFO + "<p>" + html + "</p>";
+    noteEl.hidden = false;
+    if (ms) noteTimer = setTimeout(hideNote, ms);
+  }
+  // On browsers using the fallback encoder, keep that explanation visible instead of an empty space.
+  function hideNote() { clearTimeout(noteTimer); if (!NATIVE) showNote(FALLBACK_INFO, "info"); else noteEl.hidden = true; }
+  if (!NATIVE) hideNote();
+
+  /* =============== Menus =============== */
+  const legalBtn = $("#legalBtn"), legalPanel = $("#legalPanel");
+  const menuBtn = $("#menuBtn"), mnav = $("#mnav");
+  function setOpen(btn, panel, open) { panel.hidden = !open; btn.setAttribute("aria-expanded", String(open)); }
+  function closeMenus() { setOpen(legalBtn, legalPanel, false); setOpen(menuBtn, mnav, false); menuBtn.setAttribute("aria-label", "Open menu"); }
+  legalBtn.addEventListener("click", (e) => { e.stopPropagation(); setOpen(legalBtn, legalPanel, legalPanel.hidden); });
+  menuBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const open = mnav.hidden;
+    setOpen(menuBtn, mnav, open);
+    menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  });
+  [legalPanel, mnav].forEach((p) => p.addEventListener("click", (e) => { if (!e.target.closest("a")) e.stopPropagation(); }));
+  document.addEventListener("click", closeMenus);
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    const a = document.activeElement;
+    const back = legalPanel.contains(a) ? legalBtn : mnav.contains(a) ? menuBtn : null;
+    closeMenus();
+    if (back) back.focus();
+  });
+  // Close a menu when keyboard focus moves out of it.
+  legalBtn.parentNode.addEventListener("focusout", (e) => { if (!legalBtn.parentNode.contains(e.relatedTarget)) setOpen(legalBtn, legalPanel, false); });
+  mnav.addEventListener("focusout", (e) => { if (e.relatedTarget && !mnav.contains(e.relatedTarget) && e.relatedTarget !== menuBtn) closeMenus(); });
+
+  /* =============== Router =============== */
+  const PAGES = ["home", "about", "contact", "help", "disclaimer", "privacy", "terms"];
+  const POLICY = ["disclaimer", "privacy", "terms"];
+  const TITLES = {
+    home: "WebP Studio \u2014 Convert images to WebP, free and private",
+    about: "About \u2014 WebP Studio", contact: "Contact \u2014 WebP Studio", help: "Help \u2014 WebP Studio",
+    disclaimer: "Disclaimer \u2014 WebP Studio", privacy: "Privacy Policy \u2014 WebP Studio", terms: "Terms of Use \u2014 WebP Studio"
+  };
+  // Pages are switched in-page instead of relying on browser navigation, so the menu also works
+  // inside previews, embeds and sandboxed frames (where following "#about" links can be blocked).
+  function render(raw, byUser) {
+    closeMenus();
+    raw = raw || "home";
+    let id = raw, anchor = null;
+    if (PAGES.indexOf(id) === -1) {
+      // In-page anchors (e.g. #h-faq) live on a page: show that page and scroll to them.
+      const el = raw && document.getElementById(raw);
+      const page = el && el.closest(".page");
+      if (page) { id = page.id.replace("page-", ""); anchor = el; } else id = "home";
+    }
+    PAGES.forEach((p) => { $("#page-" + p).hidden = p !== id; });
+    $$(".nav a, .mnav a, .ddpanel a").forEach((a) => {
+      const on = a.getAttribute("href") === "#" + id;
+      a.classList.toggle("on", on);
+      if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    });
+    legalBtn.classList.toggle("on", POLICY.indexOf(id) > -1);
+    document.title = TITLES[id];
+    if (anchor) anchor.scrollIntoView();
+    else if (byUser || (current && current !== id)) window.scrollTo(0, 0); // tapping the current page also returns to top
+    current = id;
+    if (byUser) {
+      // Move keyboard / screen-reader focus to the new content (the tapped link may now be hidden).
+      const f = anchor || $("#page-" + id + " h1");
+      if (f) { if (!f.hasAttribute("tabindex")) f.setAttribute("tabindex", "-1"); try { f.focus({ preventScroll: true }); } catch (e) { f.focus(); } }
+    }
+  }
+  function go(target) {
+    render(target, true);
+    // Keep the address bar in sync where allowed (real websites); silently skip in sandboxed previews.
+    try { if (location.hash !== "#" + target) history.pushState(null, "", "#" + target); } catch (e) { /* not allowed here */ }
+  }
+  document.addEventListener("click", (e) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const target = a.getAttribute("href").slice(1);
+    if (!target) return;
+    e.preventDefault();
+    go(target);
+  });
+  const fromUrl = () => { try { return decodeURIComponent((location.hash || "").slice(1)); } catch (e) { return ""; } };
+  window.addEventListener("hashchange", () => render(fromUrl()));
+  window.addEventListener("popstate", () => render(fromUrl()));
+  render(fromUrl());
+
+  $("#skip").addEventListener("click", (e) => { e.preventDefault(); const m = $("#main"); m.focus(); m.scrollIntoView(); });
+  // \u00a9 year always follows the visitor's device clock.
+  $("#year").textContent = String(new Date().getFullYear());
+
+  /* =============== Settings UI =============== */
+  function qualityHint(q) {
+    if (state.mode === "smart") return "Smart: lossless for PNG and graphics, High (0.90) for JPG and other photos. Files almost always get smaller.";
+    if (q >= 0.995) return "Lossless: keeps every pixel. Best for logos, screenshots and text.";
+    if (q >= 0.88) return "High: very hard to tell apart from the original. Great for photos.";
+    if (q >= 0.75) return "Balanced: big savings and still crisp. Ideal for websites.";
+    if (q >= 0.55) return "Small: noticeably lighter files with some softening.";
+    return "Smallest: tiny files, visible quality loss. For thumbnails and previews.";
+  }
+  function renderQuality() {
+    const smart = state.mode === "smart";
+    qualityEl.value = state.q;
+    qoutEl.textContent = smart ? "Smart" : state.q >= 0.995 ? "Lossless" : state.q.toFixed(2);
+    qhintEl.textContent = qualityHint(state.q);
+    qualityEl.style.setProperty("--p", ((state.q - 0.3) / 0.7 * 100).toFixed(1) + "%");
+    qualityEl.closest(".field").classList.toggle("smart", smart);
+    $$(".seg button").forEach((b) => {
+      const on = b.dataset.mode === "smart" ? smart : !smart && Math.abs(parseFloat(b.dataset.q) - state.q) < 0.001;
+      b.classList.toggle("on", on);
+      b.setAttribute("aria-pressed", String(on));
+    });
+  }
+  function renderSelect(sel, input, value, unit) {
+    const preset = !value || $$("option", sel).some((o) => o.value === String(value));
+    sel.value = preset ? String(value) : "custom";
+    input.hidden = sel.value !== "custom";
+    if (unit) unit.hidden = input.hidden;
+    if (!preset) input.value = value;
+  }
+  function renderAll() {
+    renderQuality();
+    renderSelect(maxSel, customEl, state.max);
+    renderSelect(targetSel, targetCustom, state.target, targetUnit);
+    cleanEl.checked = state.clean;
+  }
+  function persist() { store.set({ mode: state.mode, q: state.q, max: state.max, target: state.target, clean: state.clean }); }
+
+  let reTimer = 0;
+  function settingsChanged(delay) {
+    persist();
+    clearTimeout(reTimer);
+    reTimer = setTimeout(() => {
+      const key = settingsKey();
+      state.items.forEach((it) => {
+        if (it.running) return; // requeued automatically when it finishes
+        if (it.status === "error" && it.errCode === "decode") return;
+        if (it.key !== key || it.status === "error") schedule(it);
+      });
+      updateSummary();
+    }, delay || 0);
+  }
+
+  qualityEl.addEventListener("input", () => { state.mode = "manual"; state.q = clampQ(qualityEl.value); renderQuality(); });
+  qualityEl.addEventListener("change", () => settingsChanged(250));
+  $$(".seg button").forEach((b) => b.addEventListener("click", () => {
+    if (b.dataset.mode === "smart") state.mode = "smart";
+    else { state.mode = "manual"; state.q = clampQ(b.dataset.q); }
+    renderQuality(); settingsChanged(0);
+  }));
+
+  function bindSizeSelect(sel, input, unit, key, clamp, fallback) {
+    sel.addEventListener("change", () => {
+      if (sel.value === "custom") {
+        input.hidden = false; if (unit) unit.hidden = false;
+        input.value = state[key] || fallback; // start from the size that was selected
+        state[key] = clamp(input.value);
+        input.focus();
+      } else {
+        input.hidden = true; if (unit) unit.hidden = true;
+        state[key] = parseInt(sel.value, 10) || 0;
+      }
+      settingsChanged(0);
+    });
+    input.addEventListener("change", () => { state[key] = clamp(input.value); input.value = state[key]; settingsChanged(0); });
+  }
+  bindSizeSelect(maxSel, customEl, null, "max", clampMax, 1600);
+  bindSizeSelect(targetSel, targetCustom, targetUnit, "target", clampTarget, 150);
+
+  // File names don't need re-encoding: just refresh download names.
+  cleanEl.addEventListener("change", () => { state.clean = cleanEl.checked; persist(); state.items.forEach((it) => { if (it.status === "done") paint(it); }); });
+  renderAll();
+
+  /* =============== Decoding =============== */
+  function loadImg(file) {
+    return new Promise((resolve, reject) => {
+      const img = new Image(), url = URL.createObjectURL(file);
+      img.decoding = "async";
+      img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(err("decode", "decode")); };
+      img.src = url;
+    });
+  }
+  function parseLen(v) {
+    if (!v) return 0;
+    const m = String(v).trim().match(/^([\d.]+)\s*(px|pt|pc|in|cm|mm|em|ex|%)?$/i);
+    if (!m) return 0;
+    const n = parseFloat(m[1]), u = (m[2] || "px").toLowerCase();
+    return ({ px: 1, pt: 4 / 3, pc: 16, in: 96, cm: 96 / 2.54, mm: 96 / 25.4, em: 16, ex: 8, "%": 0 }[u] || 0) * n;
+  }
+  async function decodeSvg(file) {
+    let w = 0, h = 0;
+    try {
+      const doc = new DOMParser().parseFromString(await file.text(), "image/svg+xml");
+      const svg = doc.documentElement;
+      const vb = (svg.getAttribute("viewBox") || "").trim().split(/[\s,]+/).map(Number);
+      const pw = parseLen(svg.getAttribute("width")), ph = parseLen(svg.getAttribute("height"));
+      const hasVB = vb.length === 4 && vb[2] > 0 && vb[3] > 0;
+      if (pw && ph) { w = pw; h = ph; }
+      else if (hasVB) {
+        if (pw) { w = pw; h = pw * vb[3] / vb[2]; }
+        else if (ph) { h = ph; w = ph * vb[2] / vb[3]; }
+        else { w = vb[2]; h = vb[3]; }
+      }
+    } catch (e) { /* fall back to the browser's idea of the size */ }
+    const img = await loadImg(file);
+    if (!w || !h) { w = img.naturalWidth; h = img.naturalHeight; }
+    if (!w || !h) { w = 1024; h = 1024; }
+    return { source: img, w: Math.max(1, Math.round(w)), h: Math.max(1, Math.round(h)), vector: true, close() {} };
+  }
+  async function decode(file) {
+    if (isSvg(file)) return decodeSvg(file);
+    if (typeof createImageBitmap === "function") {
+      try {
+        const b = await createImageBitmap(file, { imageOrientation: "from-image" });
+        return { source: b, w: b.width, h: b.height, close: () => b.close && b.close() };
+      } catch (e) { /* try <img> below */ }
+    }
+    const img = await loadImg(file);
+    return { source: img, w: img.naturalWidth, h: img.naturalHeight, close() {} };
+  }
+
+  /* =============== Drawing =============== */
+  function newCanvas(w, h) {
+    const c = document.createElement("canvas");
+    c.width = w; c.height = h;
+    const ctx = c.getContext("2d");
+    if (!ctx) throw err("memory", "canvas");
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    return [c, ctx];
+  }
+  // Halve in steps for big reductions: sharper, alias-free downscales in every browser.
+  function drawScaled(src, tw, th) {
+    let cur = src.source, cw = src.w, ch = src.h;
+    const temps = [];
+    try {
+      if (!src.vector) {
+        while (cw / 2 >= tw * 1.0001 && ch / 2 >= th * 1.0001) {
+          const nw = Math.max(tw, Math.round(cw / 2)), nh = Math.max(th, Math.round(ch / 2));
+          const [c, x] = newCanvas(nw, nh);
+          x.drawImage(cur, 0, 0, nw, nh);
+          temps.push(c); cur = c; cw = nw; ch = nh;
+        }
+      }
+      const [canvas, ctx] = newCanvas(tw, th);
+      ctx.drawImage(cur, 0, 0, tw, th);
+      return [canvas, ctx];
+    } finally {
+      temps.forEach((c) => { c.width = c.height = 0; });
+    }
+  }
+  function makeThumb(canvas) {
+    const k = Math.min(1, 128 / Math.max(canvas.width, canvas.height));
+    const [c, x] = newCanvas(Math.max(1, Math.round(canvas.width * k)), Math.max(1, Math.round(canvas.height * k)));
+    x.drawImage(canvas, 0, 0, c.width, c.height);
+    return new Promise((r) => c.toBlob((b) => { c.width = c.height = 0; r(b ? URL.createObjectURL(b) : null); }, "image/png"));
+  }
+
+  /* =============== Encoding =============== */
+  const WASM_DEFAULTS = {
+    quality: 75, target_size: 0, target_PSNR: 0, method: 4, sns_strength: 50, filter_strength: 60,
+    filter_sharpness: 0, filter_type: 1, partitions: 0, segments: 4, pass: 1, show_compressed: 0,
+    preprocessing: 0, autofilter: 0, partition_limit: 0, alpha_compression: 1, alpha_filtering: 1,
+    alpha_quality: 100, lossless: 0, exact: 0, image_hint: 0, emulate_jpeg_size: 0, thread_level: 0,
+    low_memory: 0, near_lossless: 100, use_delta_palette: 0, use_sharp_yuv: 0
+  };
+  const WORKER_SRC =
+    "let mod=null;\n" +
+    "self.onmessage=async(e)=>{const d=e.data;try{\n" +
+    "  if(!mod){mod=import(" + JSON.stringify(ENCODER_URL) + ").then(m=>m.default({noInitialRun:true}));mod.catch(()=>{mod=null;});}\n" +
+    "  const m=await mod;const out=m.encode(d.data,d.width,d.height,d.options);\n" +
+    "  if(!out)throw new Error('encode');\n" +
+    "  const buf=out.buffer.slice(out.byteOffset,out.byteOffset+out.byteLength);\n" +
+    "  self.postMessage({id:d.id,buf},[buf]);\n" +
+    "}catch(x){self.postMessage({id:d.id,error:String((x&&x.message)||x)});}};";
+
+  // Tell "couldn't download the encoder" apart from "ran out of memory" so the card gives the right advice.
+  function classifyWasmError(msg) {
+    msg = String(msg || "");
+    if (/fetch|import|network|module script|load/i.test(msg)) return "load";
+    if (/memory|OOM|abort/i.test(msg)) return "memory";
+    return "encode";
+  }
+  let worker = null, mainEncoder = null, reqId = 0;
+  const pending = new Map();
+  function getWorker() {
+    if (worker === false) return null;
+    if (worker) return worker;
+    try {
+      const url = URL.createObjectURL(new Blob([WORKER_SRC], { type: "text/javascript" }));
+      worker = new Worker(url, { type: "module" });
+      worker.onmessage = (e) => {
+        const p = pending.get(e.data.id); if (!p) return;
+        pending.delete(e.data.id);
+        if (e.data.error) p.reject(err(classifyWasmError(e.data.error), e.data.error));
+        else p.resolve(new Uint8Array(e.data.buf));
+      };
+      worker.onerror = (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        try { worker.terminate(); } catch (x) { /* ignore */ }
+        worker = false;
+        pending.forEach((p) => p.reject(err("worker", "worker")));
+        pending.clear();
+      };
+      return worker;
+    } catch (e) { worker = false; return null; }
+  }
+  function wasmEncodeMain(imageData, options) {
+    if (!mainEncoder) {
+      mainEncoder = import(ENCODER_URL).then((m) => m.default({ noInitialRun: true }));
+      mainEncoder.catch(() => { mainEncoder = null; });
+    }
+    return mainEncoder.then((m) => {
+      let out;
+      try { out = m.encode(imageData.data, imageData.width, imageData.height, options); }
+      catch (x) { throw err(classifyWasmError(x && x.message) === "memory" ? "memory" : "encode", String(x)); }
+      if (!out) throw err("encode", "encode");
+      return out;
+    }, () => { throw err("load", "load"); });
+  }
+  async function wasmEncode(ctx, w, h, q) {
+    const options = Object.assign({}, WASM_DEFAULTS, q >= 0.995 ? { lossless: 1, quality: 75 } : { quality: Math.round(q * 100) });
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const imageData = ctx.getImageData(0, 0, w, h);
+      const wk = getWorker();
+      if (!wk) return wasmEncodeMain(imageData, options);
+      try {
+        return await new Promise((resolve, reject) => {
+          const id = ++reqId;
+          pending.set(id, { resolve, reject });
+          wk.postMessage({ id, data: imageData.data, width: w, height: h, options }, [imageData.data.buffer]);
+        });
+      } catch (e) {
+        if (e.code !== "worker") throw e; // worker unavailable \u2192 retry on the main thread
+      }
+    }
+    throw err("load", "load");
+  }
+  async function encode(canvas, ctx, q) {
+    if (NATIVE) {
+      const blob = await new Promise((r) => canvas.toBlob(r, "image/webp", q));
+      if (!blob) throw err("memory", "toBlob returned null");
+      if (blob.type === "image/webp") return blob;
+    }
+    const out = await wasmEncode(ctx, canvas.width, canvas.height, q);
+    return new Blob([out], { type: "image/webp" });
+  }
+  // Highest quality \u2264 q whose file fits under targetBytes (binary search).
+  async function encodeBest(canvas, ctx, q, targetBytes, item) {
+    const first = await encode(canvas, ctx, q);
+    if (!targetBytes || first.size <= targetBytes) return { blob: first, q, miss: false };
+    let lo = 0.05, hi = Math.min(q, 0.95), best = null;
+    for (let i = 0; i < 7 && hi - lo > 0.015; i++) {
+      if (item.removed) throw err("removed", "removed");
+      const mid = Math.round(((lo + hi) / 2) * 100) / 100;
+      const b = await encode(canvas, ctx, mid);
+      if (b.size <= targetBytes) { best = { blob: b, q: mid }; lo = mid; } else hi = mid;
+    }
+    if (best) return { blob: best.blob, q: best.q, miss: false };
+    const last = await encode(canvas, ctx, 0.05);
+    return { blob: last, q: 0.05, miss: last.size > targetBytes };
+  }
+
+  /* =============== Queue =============== */
+  const queue = [];
+  let running = 0;
+  function schedule(it) {
+    if (it.removed || it.running || queue.indexOf(it) > -1) return;
+    it.status = "queued";
+    queue.push(it);
+    paint(it);
+    pump();
+  }
+  function pump() {
+    while (running < CONCURRENCY && queue.length) {
+      const it = queue.shift();
+      if (it.removed) continue;
+      running++;
+      convert(it).finally(() => { running--; pump(); });
+    }
+  }
+
+  function friendlyError(e, item) {
+    const x = ext(item.file.name);
+    switch (e && e.code) {
+      case "decode":
+        if (/^hei[cf]$/.test(x)) return { code: "decode", msg: "This browser can\u2019t open HEIC photos. Use Safari, or convert to JPG first." };
+        if (/^tiff?$/.test(x)) return { code: "decode", msg: "This browser can\u2019t open TIFF files. Use Safari, or convert to PNG first." };
+        return { code: "decode", msg: "This file couldn\u2019t be opened. It may be damaged or in a format your browser can\u2019t read." };
+      case "load": return { code: "load", msg: "Couldn\u2019t load the WebP encoder. Check your internet connection and tap Retry." };
+      case "memory": return { code: "memory", msg: "Not enough memory for an image this large. Choose a smaller Resize size (e.g. 4096 px) and tap Retry." };
+      default:
+        if (e && e.name === "SecurityError") return { code: "security", msg: "This SVG uses features browsers won\u2019t export (such as embedded web content)." };
+        return { code: "other", msg: "Conversion failed. Tap Retry, or try a smaller Resize size." };
+    }
+  }
+
+  async function convert(item) {
+    const key = settingsKey(), q = qualityFor(item.file), max = state.max, targetBytes = state.target * 1024;
+    item.running = true; item.status = "working"; paint(item);
+    await nextFrame();
+    let canvas = null, ctx = null;
+    try {
+      const src = await decode(item.file);
+      if (item.removed) { src.close(); return; }
+      const sw = src.w, sh = src.h;
+      if (!sw || !sh) { src.close(); throw err("decode", "no size"); }
+
+      let tw = sw, th = sh;
+      if (max && (src.vector || Math.max(sw, sh) > max)) {
+        const k = max / Math.max(sw, sh);
+        tw = Math.max(1, Math.round(sw * k)); th = Math.max(1, Math.round(sh * k));
+      }
+      let fitted = false;
+      const kl = Math.min(1, MAX_SIDE / Math.max(tw, th), Math.sqrt(MAX_AREA / (tw * th)));
+      if (kl < 1) { tw = Math.max(1, Math.floor(tw * kl)); th = Math.max(1, Math.floor(th * kl)); fitted = true; }
+
+      try { [canvas, ctx] = drawScaled(src, tw, th); }
+      finally { src.close(); }
+      if (!item.thumb) {
+        const t = await makeThumb(canvas);
+        if (item.removed) { if (t) URL.revokeObjectURL(t); return; }
+        item.thumb = t;
+      }
+      if (item.removed) return;
+
+      const res = await encodeBest(canvas, ctx, q, targetBytes, item);
+      if (item.removed) return;
+
+      if (item.url) URL.revokeObjectURL(item.url);
+      Object.assign(item, {
+        blob: res.blob, url: URL.createObjectURL(res.blob), qUsed: res.q, miss: res.miss, target: state.target,
+        w: tw, h: th, sw, sh, fitted, vector: !!src.vector, status: "done", error: null, errCode: null, key
+      });
+    } catch (e) {
+      if (item.removed) return;
+      if (e && e.code !== "decode" && e.code !== "load") console.warn("[WebP Studio]", item.file.name, e);
+      const f = friendlyError(e, item);
+      Object.assign(item, { status: "error", error: f.msg, errCode: f.code, key });
+    } finally {
+      // Free the full-size canvas on every path (success, error, removed). iPhones have a hard canvas-memory cap.
+      if (canvas) canvas.width = canvas.height = 0;
+      item.running = false;
+      if (!item.removed) {
+        if (settingsKey() !== key && !(item.status === "error" && item.errCode === "decode")) schedule(item);
+        else paint(item);
+      }
+      updateSummary();
+    }
+  }
+
+  /* =============== Rendering =============== */
+  const SVG_X = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  const SVG_CMP = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v16"/></svg>';
+  const SVG_DL = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>';
+  const SVG_RETRY = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>';
+  const SVG_WARN = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17h.01"/></svg>';
+
+  function paint(item) {
+    if (!item.el) {
+      const el = document.createElement("div");
+      el.className = "card";
+      el.innerHTML =
+        '<div class="thumb chk"></div>' +
+        '<div class="info"><p class="fname"></p><p class="fmeta"></p></div>' +
+        '<div class="acts">' +
+          '<button class="btn sm ghost cmpb" type="button">' + SVG_CMP + "Compare</button>" +
+          '<button class="btn sm retry" type="button">' + SVG_RETRY + "Retry</button>" +
+          '<a class="btn sm primary dl" download>' + SVG_DL + "WebP</a>" +
+          '<button class="iconbtn rm" type="button">' + SVG_X + "</button>" +
+        "</div>";
+      item.el = el;
+      item.$thumb = $(".thumb", el); item.$name = $(".fname", el); item.$meta = $(".fmeta", el);
+      item.$dl = $(".dl", el); item.$cmp = $(".cmpb", el); item.$retry = $(".retry", el);
+      item.$name.innerHTML = (item.dir ? '<span class="dir">' + esc(item.dir) + "/</span>" : "") + esc(item.file.name);
+      item.$name.title = (item.dir ? item.dir + "/" : "") + item.file.name;
+      const rm = $(".rm", el);
+      rm.setAttribute("aria-label", "Remove " + item.file.name);
+      rm.addEventListener("click", () => removeItem(item));
+      item.$cmp.addEventListener("click", () => openCompare(item));
+      item.$retry.addEventListener("click", () => schedule(item));
+      item.$dl.addEventListener("click", (e) => { if (item.status !== "done") e.preventDefault(); });
+      listEl.appendChild(el);
+    }
+
+    const s = item.status, el = item.el;
+    el.classList.toggle("busy", s === "queued" || s === "working");
+    el.classList.toggle("err", s === "error");
+
+    let th = "";
+    if (s === "error") th = SVG_WARN;
+    else {
+      if (item.thumb) th = '<img alt="" src="' + item.thumb + '">';
+      if (s !== "done") th += '<span class="spin" aria-hidden="true"></span>';
+    }
+    if (item._th !== th) { item.$thumb.innerHTML = th; item._th = th; }
+
+    item.$dl.hidden = s !== "done";
+    item.$cmp.hidden = s !== "done";
+    item.$retry.hidden = !(s === "error" && item.errCode !== "decode");
+
+    if (s === "queued") { item.$meta.textContent = item.blob ? "Waiting to update\u2026" : "Waiting\u2026"; return; }
+    if (s === "working") { item.$meta.textContent = (item.blob ? "Updating\u2026" : "Converting\u2026") + (state.target ? " finding the best quality under " + bytes(state.target * 1024) : ""); return; }
+    if (s === "error") { item.$meta.innerHTML = '<span class="error">' + esc(item.error) + "</span>"; return; }
+
+    // done
+    const name = outName(item);
+    item.$dl.href = item.url;
+    item.$dl.download = name;
+    item.$dl.setAttribute("aria-label", "Download " + name);
+    item.$cmp.setAttribute("aria-label", "Compare " + item.file.name + " with the WebP");
+    const before = item.file.size, after = item.blob.size, pt = pctText(before, after);
+    let dims = item.w + " \u00d7 " + item.h;
+    if (item.fitted) dims += " (scaled to fit browser limit)";
+    else if (!item.vector && (item.w !== item.sw || item.h !== item.sh)) dims += " (from " + item.sw + " \u00d7 " + item.sh + ")";
+    const qtag = item.qUsed >= 0.995 ? "Lossless" : "Q " + item.qUsed.toFixed(2);
+    let hint = "";
+    if (item.miss) hint = "Couldn\u2019t get under " + bytes(item.target * 1024) + " even at the lowest quality. Choose a smaller Resize size.";
+    else if (pt.p > 0) hint = "Larger than the original. Try a lower quality, or keep your original.";
+    item.$meta.innerHTML =
+      '<span class="pill ' + (pt.p <= 0 && !item.miss ? "good" : "bad") + '">' + pt.txt + "</span>" +
+      bytes(before) + " \u2192 <b>" + bytes(after) + "</b>" + '<span class="sep">\u00b7</span>' + dims +
+      '<span class="sep">\u00b7</span>' + qtag +
+      (state.clean ? '<span class="sep">\u00b7</span>' + esc(name) : "") +
+      (hint ? '<span class="hint">' + hint + "</span>" : "");
+  }
+
+  function updateSummary() {
+    const total = state.items.length;
+    resultsEl.hidden = total === 0;
+    if (!total) return;
+
+    let done = 0, failed = 0, retryable = 0, before = 0, after = 0;
+    state.items.forEach((it) => {
+      if (it.status === "done") { done++; before += it.file.size; after += it.blob.size; }
+      else if (it.status === "error") { failed++; if (it.errCode !== "decode") retryable++; }
+    });
+    const busy = total - done - failed;
+    const pct = Math.round(((done + failed) / total) * 100);
+    pbar.style.width = pct + "%";
+    progEl.setAttribute("aria-valuenow", String(pct));
+    progEl.style.visibility = busy ? "visible" : "hidden";
+
+    let html;
+    if (busy) html = "Converting\u2026 <b>" + (done + failed) + "</b> of <b>" + total + "</b> ready";
+    else if (done) {
+      const pt = pctText(before, after);
+      html = "<b>" + done + "</b> file" + (done > 1 ? "s" : "") + " \u00b7 " + bytes(before) + " \u2192 <b>" + bytes(after) + "</b> " +
+        (pt.p <= 0 ? '<span class="saved">saved ' + pt.txt.slice(1) + "</span>" : "(" + pt.txt + ")");
+    } else html = "Nothing converted";
+    if (failed) html += " \u00b7 " + failed + " failed";
+    summaryEl.innerHTML = html;
+    // Announce to screen readers once per batch, not on every single file.
+    if (wasBusy && !busy) liveEl.textContent = "Done. " + summaryEl.textContent;
+    wasBusy = busy > 0;
+    retryFailedEl.hidden = !(retryable && !busy);
+
+    const ready = !busy && done > 0;
+    dlAllEl.disabled = !ready || zipping || savingSep;
+    dlSepEl.disabled = !ready || zipping || savingSep;
+    shareEl.disabled = !ready;
+    dlSepEl.hidden = done < 2;
+    if (!zipping) dlAllTxt.textContent = done === 1 ? "Download WebP" : "Download ZIP";
+    if (!savingSep) dlSepTxt.textContent = "Save separately";
+  }
+
+  /* =============== Items =============== */
+  const ACCEPT_RE = /^(png|jpe?g|jfif|pjpeg|gif|bmp|dib|tiff?|avif|svg|ico|cur|heic|heif|webp|apng)$/;
+  let pasteN = 0;
+  // Accepts File objects or { file, path } (path = relative path inside a dropped/selected folder).
+  function addFiles(list) {
+    const entries = Array.from(list || []).map((x) => (x instanceof Blob ? { file: x, path: x.webkitRelativePath || "" } : x));
+    if (!entries.length) { hideNote(); return; }
+    let accepted = 0, skipped = 0;
+    entries.forEach(({ file: f, path }) => {
+      if (/^\._/.test(f.name) || !(f.type.indexOf("image/") === 0 || ACCEPT_RE.test(ext(f.name)))) { skipped++; return; }
+      accepted++;
+      const p = String(path || "").replace(/^\/+/, "");
+      const dir = p.indexOf("/") > -1 ? p.slice(0, p.lastIndexOf("/")) : "";
+      const item = { file: f, dir, status: "queued", running: false, removed: false, blob: null, url: null, thumb: null, key: null };
+      state.items.push(item);
+      schedule(item);
+    });
+    if (!accepted) showNote("No supported images found. Try PNG, JPG, GIF, WebP, AVIF or SVG files.", "warn", 7000);
+    else if (skipped) showNote(skipped + " file" + (skipped > 1 ? "s were" : " was") + " skipped because " + (skipped > 1 ? "they aren\u2019t images" : "it isn\u2019t an image") + ".", "warn", 6000);
+    else hideNote();
+    if (accepted && current !== "home") { render("home"); try { history.pushState(null, "", "#home"); } catch (e) { /* preview */ } }
+    updateSummary();
+  }
+  function releaseItem(it) {
+    it.removed = true;
+    if (it.url) URL.revokeObjectURL(it.url);
+    if (it.thumb) URL.revokeObjectURL(it.thumb);
+  }
+  function removeItem(it) {
+    releaseItem(it);
+    const qi = queue.indexOf(it); if (qi > -1) queue.splice(qi, 1);
+    if (it.el) it.el.remove();
+    const i = state.items.indexOf(it); if (i > -1) state.items.splice(i, 1);
+    updateSummary();
+  }
+  function clearAll() {
+    state.items.forEach(releaseItem);
+    state.items = []; queue.length = 0;
+    if (zipUrl) { URL.revokeObjectURL(zipUrl); zipUrl = null; }
+    listEl.textContent = "";
+    updateSummary();
+  }
+
+  /* =============== Input: click, folders, drag & drop, paste =============== */
+  dropEl.addEventListener("click", () => fileEl.click());
+  fileEl.addEventListener("change", () => { addFiles(fileEl.files); fileEl.value = ""; });
+  if (CAN_FOLDER) {
+    folderBtn.hidden = false;
+    folderBtn.addEventListener("click", () => folderEl.click());
+    folderEl.addEventListener("change", () => { addFiles(folderEl.files); folderEl.value = ""; });
+  }
+
+  function readAllEntries(reader) {
+    return new Promise((resolve, reject) => {
+      const all = [];
+      const next = () => reader.readEntries((batch) => { if (!batch.length) resolve(all); else { all.push.apply(all, batch); next(); } }, reject);
+      next();
+    });
+  }
+  async function walkEntry(entry, out) {
+    if (entry.isFile) {
+      try { const f = await new Promise((res, rej) => entry.file(res, rej)); out.push({ file: f, path: entry.fullPath || f.name }); }
+      catch (e) { /* unreadable file: skip */ }
+    } else if (entry.isDirectory) {
+      const kids = await readAllEntries(entry.createReader()).catch(() => []);
+      for (const k of kids) await walkEntry(k, out);
+    }
+  }
+
+  let dragDepth = 0;
+  const hasFiles = (e) => e.dataTransfer && Array.from(e.dataTransfer.types || []).indexOf("Files") > -1;
+  window.addEventListener("dragenter", (e) => { if (!hasFiles(e)) return; e.preventDefault(); dragDepth++; document.body.classList.add("dragging"); });
+  window.addEventListener("dragover", (e) => { if (!hasFiles(e)) return; e.preventDefault(); e.dataTransfer.dropEffect = "copy"; });
+  window.addEventListener("dragleave", () => { dragDepth = Math.max(0, dragDepth - 1); if (!dragDepth) document.body.classList.remove("dragging"); });
+  window.addEventListener("drop", (e) => {
+    if (!hasFiles(e)) return;
+    e.preventDefault(); dragDepth = 0; document.body.classList.remove("dragging");
+    const dt = e.dataTransfer;
+    // Entries must be read synchronously, before this handler returns.
+    const entries = Array.from(dt.items || []).map((it) => (it.kind === "file" && it.webkitGetAsEntry ? it.webkitGetAsEntry() : null));
+    if (entries.some((en) => en && en.isDirectory)) {
+      showNote("Reading folder\u2026", "info");
+      (async () => {
+        const out = [];
+        for (const en of entries) if (en) await walkEntry(en, out);
+        addFiles(out);
+      })();
+    } else addFiles(dt.files);
+  });
+
+  document.addEventListener("paste", (e) => {
+    const t = e.target;
+    if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+    const cd = e.clipboardData; if (!cd) return;
+    const files = [];
+    Array.from(cd.items || []).forEach((it) => {
+      if (it.kind !== "file") return;
+      const f = it.getAsFile(); if (!f || f.type.indexOf("image/") !== 0) return;
+      const generic = !f.name || /^image\.\w+$/i.test(f.name);
+      files.push(generic ? new File([f], "pasted-image-" + (++pasteN) + "." + (f.type.split("/")[1] || "png").replace("jpeg", "jpg").replace(/\+.*/, ""), { type: f.type }) : f);
+    });
+    if (files.length) { e.preventDefault(); addFiles(files); }
+  });
+
+  /* =============== ZIP (store-only, UTF-8 names, keeps folders) =============== */
+  const CRC_TABLE = (() => {
+    const t = new Uint32Array(256);
+    for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; }
+    return t;
+  })();
+  function crc32(u8) { let c = 0xFFFFFFFF; for (let i = 0; i < u8.length; i++) c = CRC_TABLE[(c ^ u8[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+
+  async function buildZip(entries) {
+    const enc = new TextEncoder(), parts = [], central = [];
+    const d = new Date();
+    const time = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1);
+    const date = ((Math.max(1980, d.getFullYear()) - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+    let offset = 0;
+    for (let i = 0; i < entries.length; i++) {
+      const { name, blob } = entries[i];
+      const data = new Uint8Array(await blob.arrayBuffer());
+      const nm = enc.encode(name), crc = crc32(data), size = data.length;
+      const lh = new DataView(new ArrayBuffer(30));
+      lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true); lh.setUint16(6, 0x0800, true); lh.setUint16(8, 0, true);
+      lh.setUint16(10, time, true); lh.setUint16(12, date, true); lh.setUint32(14, crc, true);
+      lh.setUint32(18, size, true); lh.setUint32(22, size, true); lh.setUint16(26, nm.length, true); lh.setUint16(28, 0, true);
+      parts.push(lh, nm, blob);
+      const ch = new DataView(new ArrayBuffer(46));
+      ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true); ch.setUint16(8, 0x0800, true);
+      ch.setUint16(10, 0, true); ch.setUint16(12, time, true); ch.setUint16(14, date, true); ch.setUint32(16, crc, true);
+      ch.setUint32(20, size, true); ch.setUint32(24, size, true); ch.setUint16(28, nm.length, true);
+      ch.setUint16(30, 0, true); ch.setUint16(32, 0, true); ch.setUint16(34, 0, true); ch.setUint16(36, 0, true);
+      ch.setUint32(38, 0, true); ch.setUint32(42, offset, true);
+      central.push(ch, nm);
+      offset += 30 + nm.length + size;
+      if (i % 8 === 7) { dlAllTxt.textContent = "Preparing ZIP\u2026 " + Math.round(((i + 1) / entries.length) * 100) + "%"; await nextFrame(); }
+    }
+    const cdSize = central.reduce((s, p) => s + p.byteLength, 0);
+    const end = new DataView(new ArrayBuffer(22));
+    end.setUint32(0, 0x06054b50, true); end.setUint16(4, 0, true); end.setUint16(6, 0, true);
+    end.setUint16(8, entries.length, true); end.setUint16(10, entries.length, true);
+    end.setUint32(12, cdSize, true); end.setUint32(16, offset, true); end.setUint16(20, 0, true);
+    return new Blob(parts.concat(central, [end]), { type: "application/zip" });
+  }
+
+  // Unique output names; withDirs keeps folder structure (ZIP), otherwise flat (separate downloads/share).
+  function doneEntries(withDirs) {
+    const used = new Set();
+    return state.items.filter((it) => it.status === "done").map((it) => {
+      const prefix = withDirs && it.dir ? it.dir + "/" : "";
+      const b = outBase(it);
+      let n = prefix + b + ".webp", i = 2;
+      while (used.has(n.toLowerCase())) n = prefix + b + "-" + (i++) + ".webp";
+      used.add(n.toLowerCase());
+      return { item: it, name: n, blob: it.blob };
+    });
+  }
+  function triggerDownload(href, name) {
+    const a = document.createElement("a");
+    a.href = href; a.download = name; a.rel = "noopener"; a.style.display = "none";
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+  // Keep the ZIP's link alive until the next ZIP or Clear all: on iPhone the download only starts
+  // when the person taps "Download" in Safari's prompt, which can be minutes later.
+  let zipUrl = null;
+  function saveZip(blob, name) {
+    if (zipUrl) URL.revokeObjectURL(zipUrl);
+    zipUrl = URL.createObjectURL(blob);
+    triggerDownload(zipUrl, name);
+  }
+
+  dlAllEl.addEventListener("click", async () => {
+    const entries = doneEntries(true);
+    if (!entries.length || zipping || savingSep) return;
+    if (entries.length === 1) { triggerDownload(entries[0].item.url, entries[0].name.split("/").pop()); return; }
+    const total = entries.reduce((s, e) => s + e.blob.size, 0);
+    if (entries.length > 65535 || total > 4 * 1024 * 1024 * 1024 - 1) {
+      showNote("This batch is too large for one ZIP (limit: 65,535 files or 4 GB). Use Save separately, or download in smaller batches.", "warn", 9000);
+      return;
+    }
+    zipping = true; updateSummary(); dlAllTxt.textContent = "Preparing ZIP\u2026";
+    try {
+      const zip = await buildZip(entries);
+      const d = new Date(), pad = (n) => String(n).padStart(2, "0");
+      saveZip(zip, "webp-studio-" + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + "-" + pad(d.getHours()) + pad(d.getMinutes()) + ".zip");
+    } catch (e) {
+      console.warn(e);
+      showNote("Couldn\u2019t create the ZIP file, probably because the batch is too large for your device\u2019s memory. Use Save separately, or convert fewer at a time.", "warn", 9000);
+    } finally {
+      zipping = false; updateSummary();
+    }
+  });
+
+  dlSepEl.addEventListener("click", async () => {
+    const entries = doneEntries(false);
+    if (!entries.length || zipping || savingSep) return;
+    savingSep = true; updateSummary();
+    try {
+      for (let i = 0; i < entries.length; i++) {
+        if (state.items.indexOf(entries[i].item) === -1) continue; // removed meanwhile
+        dlSepTxt.textContent = "Saving " + (i + 1) + " of " + entries.length + "\u2026";
+        triggerDownload(entries[i].item.url, entries[i].name);
+        await sleep(entries.length > 10 ? 250 : 400);
+      }
+      if (entries.length > 1) showNote("Sent " + entries.length + " files to your downloads. If only one arrived, allow multiple downloads for this site and try again, or use Download ZIP.", "info", 9000);
+    } finally {
+      savingSep = false; updateSummary();
+    }
+  });
+
+  if (CAN_SHARE) {
+    shareEl.hidden = false;
+    shareEl.addEventListener("click", async () => {
+      const files = doneEntries(false).map((e) => new File([e.blob], e.name, { type: "image/webp" }));
+      if (!files.length) return;
+      try {
+        if (navigator.canShare && !navigator.canShare({ files })) throw new Error("cannot share");
+        await navigator.share({ files });
+      } catch (e) {
+        if (e && e.name === "AbortError") return;
+        showNote("Sharing isn\u2019t available for these files here. Use Download ZIP or Save separately instead.", "warn", 6000);
+      }
+    });
+  }
+
+  clearEl.addEventListener("click", clearAll);
+  retryFailedEl.addEventListener("click", () => state.items.forEach((it) => { if (it.status === "error" && it.errCode !== "decode") schedule(it); }));
+
+  /* =============== Compare dialog =============== */
+  const dlg = $("#cmp"), stage = $("#cmpStage"), wrap = $("#cmpWrap"), imgA = $("#cmpA"), imgB = $("#cmpB");
+  const line = $("#cmpLine"), range = $("#cmpRange"), zoomBtn = $("#cmpZoom");
+  let cmpItem = null, origUrl = null, actual = false;
+
+  function setPos(p) {
+    p = Math.max(0, Math.min(100, p));
+    range.value = p;
+    imgB.style.clipPath = "inset(0 0 0 " + p + "%)";
+    imgB.style.webkitClipPath = "inset(0 0 0 " + p + "%)";
+    line.style.left = p + "%";
+  }
+  function layout() {
+    if (!cmpItem) return;
+    const w = cmpItem.w, h = cmpItem.h;
+    if (actual) {
+      const dpr = window.devicePixelRatio || 1;
+      wrap.style.width = w / dpr + "px"; wrap.style.height = h / dpr + "px";
+    } else {
+      const pad = 24, aw = Math.max(50, stage.clientWidth - pad * 2), ah = Math.max(50, stage.clientHeight - pad * 2);
+      const k = Math.min(aw / w, ah / h, 4);
+      wrap.style.width = Math.round(w * k) + "px"; wrap.style.height = Math.round(h * k) + "px";
+    }
+  }
+  function setActual(on) {
+    actual = on;
+    stage.classList.toggle("actual", on);
+    zoomBtn.textContent = on ? "Fit to screen" : "Actual pixels";
+    layout();
+    if (on) { stage.scrollLeft = (stage.scrollWidth - stage.clientWidth) / 2; stage.scrollTop = (stage.scrollHeight - stage.clientHeight) / 2; }
+  }
+  function openCompare(item) {
+    if (item.status !== "done") return;
+    cmpItem = item;
+    origUrl = URL.createObjectURL(item.file);
+    imgA.src = origUrl; imgB.src = item.url;
+    const pt = pctText(item.file.size, item.blob.size);
+    $("#cmpTitle").textContent = item.file.name;
+    $("#cmpMeta").textContent = "Original " + bytes(item.file.size) + " \u00b7 WebP " + bytes(item.blob.size) + " (" + pt.txt + ") \u00b7 " + item.w + " \u00d7 " + item.h;
+    const dl = $("#cmpDl"); dl.href = item.url; dl.download = outName(item);
+    setPos(50);
+    if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", "");
+    setActual(false);
+    requestAnimationFrame(layout);
+  }
+  function closeCompare() { if (dlg.open) { if (typeof dlg.close === "function") dlg.close(); else { dlg.removeAttribute("open"); dlg.dispatchEvent(new Event("close")); } } }
+  dlg.addEventListener("close", () => {
+    imgA.removeAttribute("src"); imgB.removeAttribute("src");
+    if (origUrl) { URL.revokeObjectURL(origUrl); origUrl = null; }
+    const back = cmpItem && cmpItem.$cmp; cmpItem = null;
+    if (back && document.contains(back)) back.focus();
+  });
+  $("#cmpClose").addEventListener("click", closeCompare);
+  dlg.addEventListener("click", (e) => { if (e.target === dlg) closeCompare(); });
+  range.addEventListener("input", () => setPos(parseFloat(range.value)));
+  zoomBtn.addEventListener("click", () => setActual(!actual));
+  window.addEventListener("resize", () => { if (dlg.open) layout(); });
+
+  let dragging = false;
+  function posFromEvent(e) { const r = wrap.getBoundingClientRect(); setPos(((e.clientX - r.left) / r.width) * 100); }
+  wrap.addEventListener("pointerdown", (e) => {
+    if (actual) return;
+    dragging = true; if (wrap.setPointerCapture) wrap.setPointerCapture(e.pointerId); posFromEvent(e);
+  });
+  wrap.addEventListener("pointermove", (e) => { if (dragging) posFromEvent(e); });
+  ["pointerup", "pointercancel"].forEach((t) => wrap.addEventListener(t, () => { dragging = false; }));
+
+  /* =============== Contact page =============== */
+  async function copyText(t) {
+    try { await navigator.clipboard.writeText(t); return true; }
+    catch (e) {
+      const ta = document.createElement("textarea");
+      ta.value = t; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      let ok = false; try { ok = document.execCommand("copy"); } catch (x) { /* ignore */ }
+      ta.remove(); return ok;
+    }
+  }
+  const copiedMsg = $("#copiedMsg");
+  let copiedTimer = 0;
+  $("#copyEmail").addEventListener("click", async () => {
+    const ok = await copyText(EMAIL);
+    copiedMsg.textContent = ok ? "Copied" : "Couldn\u2019t copy. Please select the address above.";
+    copiedMsg.hidden = false;
+    clearTimeout(copiedTimer); copiedTimer = setTimeout(() => { copiedMsg.hidden = true; }, 2500);
+  });
+
+  const cfName = $("#cfName"), cfTopic = $("#cfTopic"), cfMsg = $("#cfMsg"), cfInfo = $("#cfInfo"), cfSend = $("#cfSend");
+  function buildMail() {
+    const name = cfName.value.trim();
+    let body = "Hi Nachiket,\n\n" + cfMsg.value.trim().slice(0, 1500) + "\n\n";
+    if (name) body += "\u2014 " + name + "\n";
+    if (cfInfo.checked) {
+      body += "\n---\nBrowser: " + navigator.userAgent +
+        "\nScreen: " + screen.width + " \u00d7 " + screen.height +
+        "\nWebP encoder: " + (NATIVE ? "built-in" : "libwebp fallback") +
+        "\nLanguage: " + (navigator.language || "unknown");
+    }
+    return mailto("WebP Studio \u2014 " + cfTopic.value, body);
+  }
+  const syncMail = () => { cfSend.href = buildMail(); };
+  [cfName, cfMsg].forEach((el) => el.addEventListener("input", syncMail));
+  [cfTopic, cfInfo].forEach((el) => el.addEventListener("change", syncMail));
+  syncMail();
+
+  /* =============== Link safety net =============== */
+  // If tapping an email or LinkedIn link does nothing (no email app set up, or a preview/in-app browser
+  // blocks it), show the address with a Copy button so the visitor is never stuck.
+  const toast = $("#toast"), toastText = $("#toastText"), toastCopy = $("#toastCopy");
+  let toastValue = "", toastTimer = 0;
+  function hideToast() { toast.hidden = true; clearTimeout(toastTimer); }
+  function showToast(text, value) {
+    toastText.textContent = text; toastValue = value; toastCopy.textContent = "Copy";
+    toast.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(hideToast, 15000);
+  }
+  toastCopy.addEventListener("click", async () => {
+    const ok = await copyText(toastValue);
+    toastCopy.textContent = ok ? "Copied" : "Press and hold the text to copy";
+  });
+  $("#toastClose").addEventListener("click", hideToast);
+  document.addEventListener("click", (e) => {
+    if (e.defaultPrevented || e.button !== 0) return;
+    const a = e.target.closest && e.target.closest('a[href^="mailto:"], a[target="_blank"]');
+    if (!a) return;
+    const isMail = a.href.indexOf("mailto:") === 0;
+    const value = isMail ? EMAIL : a.href;
+    let left = false;
+    const mark = () => { left = true; };
+    window.addEventListener("blur", mark);
+    document.addEventListener("visibilitychange", mark);
+    setTimeout(() => {
+      window.removeEventListener("blur", mark);
+      document.removeEventListener("visibilitychange", mark);
+      if (left || document.hidden) return; // the email app or new tab opened
+      showToast(isMail ? "No email app opened? My address: " + EMAIL
+                       : "Couldn\u2019t open the link here. Copy it: " + value.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, ""), value);
+    }, 1500);
+  });
+})();
+</script>
+</body>
+</html>
